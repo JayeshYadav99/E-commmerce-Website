@@ -1,12 +1,15 @@
 import React ,{useState,useEffect} from 'react'
 import AdminMenu from "../../Components/AdminMenu";
-import { NavLink,Link } from 'react-router-dom'
+import { NavLink,Link,useNavigate } from 'react-router-dom'
 import Layout from '../../Components/Layout'
 import { toast } from "react-toastify"
+import TimeAgo from 'react-timeago';
 import axios from "axios";
 import 'react-toastify/dist/ReactToastify.css';
+
 import ProductGrid from '../../Components/Routes/Innovation/Productgrid';
 const Product = () => {
+   const navigate=useNavigate();
   const[products,Setproducts]=useState([]);
   const [viewMode, setViewMode] = useState(false);
   const getAllproducts=async()=>{
@@ -127,8 +130,8 @@ Setproducts(data.products);
             </tr>
           </thead>
           <tbody>
-            {products?.map((product)=>(
-               <tr   className="border-b dark:border-gray-600 hover:bg-gray-100 dark:hover:bg-gray-700">
+            {products?.map((product,index)=>(
+               <tr key={index}  className="border-b dark:border-gray-600 hover:bg-gray-100 dark:hover:bg-gray-700">
                <td className="w-4 px-4 py-3">
                  <div className="flex items-center">
                    <input id="checkbox-table-search-1" type="checkbox" onclick="event.stopPropagation()" className="w-4 h-4 bg-gray-100 border-gray-300 rounded text-primary-600 focus:ring-primary-500 dark:focus:ring-primary-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" />
@@ -136,7 +139,11 @@ Setproducts(data.products);
                  </div>
                </td>
                <th scope="row" className="flex items-center px-4 py-2  mt-2 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                 <img src={`${import.meta.env.VITE_API_URL}/api/v1/product/product-photo/${product._id}`} alt="first omagw" className="w-auto h-12 mr-3 mb-4" />
+               <img
+  src={`${import.meta.env.VITE_API_URL}/api/v1/product/product-photo/${product._id}?cache=${Math.random()}`}
+  alt="product"
+  className="w-auto h-12 mr-3 mb-4"
+/>
                <h1 className='text-md mb-2'>{product.name}</h1>  
                </th>
           
@@ -154,8 +161,8 @@ Setproducts(data.products);
                  <span className=" text-black font-bold text-xs  px-2 py-0.5 rounded dark:bg-primary-900 dark:text-primary-300">{product?.price}$ </span>
                </td>
             
-               <td className="px-4 py-2 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-               <span className="bg-primary-100 text-primary-800 text-xs font-medium px-2 py-0.5 rounded dark:bg-primary-900 dark:text-primary-300">{product?.description}</span>
+               <td className="px-4 py-2 font-medium text-gray-900 whitespace-wrap dark:text-white">
+               <span class="bg-blue-100 text-blue-800 text-xs font-bold mr-2 py-0.5 rounded dark:bg-blue-200 dark-text-blue-800 whitespace-wrap max-w-xl">{product.description}</span>
                </td>
                <td className="px-4 py-2 font-medium text-gray-900 whitespace-nowrap dark:text-white">
                <span className=" text-primary-800 text-xs font-medium px-2 py-0.5 rounded dark:bg-primary-900 dark:text-primary-300">{product?.shipping ? (
@@ -166,7 +173,7 @@ Setproducts(data.products);
   </svg>)}</span>
                </td>
              
-               <td className="px-4 py-2 font-medium text-gray-900 whitespace-nowrap dark:text-white">Just now</td>
+               <td className="px-4 py-2 font-medium text-gray-900 whitespace-nowrap dark:text-white"><TimeAgo date={product.updatedAt} /></td>
              </tr>
             ))}
            

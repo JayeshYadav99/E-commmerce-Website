@@ -7,10 +7,11 @@ export default function Homepage() {
   const[auth,SetAuth]=useAuth();
 
   return (
-    <Layout>    
-       <pre>{JSON.stringify(auth,null,4)}</pre>
+    <Layout title={"All Products - Best Offers"}>    
+       {/* <pre>{JSON.stringify(auth,null,4)}</pre> */}
       <div>
       {/* Intro section*/}
+
       <section >
         <div className="bg-red-400 max-w-screen dark:bg-gray-900 mb-0 ">
           <div className="grid max-w-screen-2xl px-2 py-8 mx-auto lg:gap-8 xl:gap-0 lg:py-16 lg:grid-cols-12 ">
@@ -21,7 +22,7 @@ export default function Homepage() {
 
 
               <a
-                href="#"
+                href="/ProductGalllery"
                 className="inline-flex items-center justify-center px-5 py-3 mr-3 text-base font-medium text-center text-white rounded-full bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:ring-primary-300 dark:focus:ring-primary-900"
               >
                 Start Shopping
@@ -48,7 +49,127 @@ export default function Homepage() {
           </div>
         </div>
       </section>
-      {/* Features section*/}
+
+      <section className="bg-green-200 p-4 ">
+        <h1 className="text-7xl mx-auto text-center mb-8">Products</h1>
+
+        <Imageslider />
+        <div className="grid grid-cols-2  md:grid-cols-3 gap-4 p-8">
+          <div class="relative ">
+            <img
+              className="h-auto max-w-full rounded-lg"
+              src="https://flowbite.s3.amazonaws.com/docs/gallery/square/image.jpg"
+              alt=""
+            />
+                 <div class="absolute bottom-0 left-0 right-0 px-4 py-2 bg-gray-800 opacity-70">
+            <h3 class="text-xl text-white font-bold mb-4">
+                Oils and Nutrients</h3>
+           
+        </div>
+
+          </div>
+
+
+
+          <div className='relative'>
+            <img
+              className="h-auto max-w-full rounded-lg"
+              src="https://flowbite.s3.amazonaws.com/docs/gallery/square/image-4.jpg"
+              alt=""
+            />
+               <div class="absolute bottom-0 left-0 right-0 px-4 py-2 bg-gray-800 opacity-70">
+            <h3 class="text-xl text-white font-bold mb-4">
+              Watches</h3>
+           
+        </div>
+          </div>
+          <div className='relative'>
+            <img
+              className="h-auto max-w-full rounded-lg"
+              src="https://flowbite.s3.amazonaws.com/docs/gallery/square/image-5.jpg"
+              alt=""
+            />
+               <div class="absolute bottom-0 left-0 right-0 px-4 py-2 bg-gray-800 opacity-70">
+            <h3 class="text-xl text-white font-bold mb-4">
+              Shoes</h3>
+           
+        </div>
+          </div>
+          <div class="relative">
+            <img
+              className="h-auto max-w-full rounded-lg"
+              src="https://flowbite.s3.amazonaws.com/docs/gallery/square/image-6.jpg"
+              alt=""
+            />
+             <div class="absolute bottom-0 left-0 right-0 px-4 py-2 bg-gray-800 opacity-70">
+            <h3 class="text-xl text-white font-bold mb-4">
+            SkinCare</h3>
+           
+        </div>
+          </div>
+          <div className='relative'>
+            <img
+              className="h-auto max-w-full rounded-lg"
+              src="https://flowbite.s3.amazonaws.com/docs/gallery/square/image-7.jpg"
+              alt=""
+            />
+             <div class="absolute bottom-0 left-0 right-0 px-4 py-2 bg-gray-800 opacity-70">
+            <h3 class="text-xl text-white font-bold mb-4">
+              Accessories</h3>
+           
+        </div>
+          </div>
+          <div className='relative'>
+            <img
+              className="h-auto max-w-full rounded-lg"
+              src="https://flowbite.s3.amazonaws.com/docs/gallery/square/image-8.jpg"
+              alt=""
+            />
+             <div class="absolute bottom-0 left-0 right-0 px-4 py-2 bg-gray-800 opacity-70">
+            <h3 class="text-xl text-white font-bold mb-4">
+              Lights and Lamps</h3>
+           
+        </div>
+          </div>
+          <div className='relative'>
+            <img
+              className="h-auto max-w-full rounded-lg"
+              src="https://flowbite.s3.amazonaws.com/docs/gallery/square/image-9.jpg"
+              alt=""
+            />
+            <div class="absolute bottom-0 left-0 right-0 px-4 py-2 bg-gray-800 opacity-70">
+            <h3 class="text-xl text-white font-bold mb-4">
+              Spices and Herbs</h3>
+           
+        </div>
+          </div>
+          <div className='relative'>
+            <img
+              className="h-auto max-w-full rounded-lg"
+              src="https://flowbite.s3.amazonaws.com/docs/gallery/square/image-10.jpg"
+              alt=""
+            />
+             <div class="absolute bottom-0 left-0 right-0 px-4 py-2 bg-gray-800 opacity-70">
+            <h3 class="text-xl text-white font-bold mb-4">
+            Games</h3>
+           
+        </div>
+          </div>
+          <div className='relative'>
+            <img
+              className="h-auto max-w-full rounded-lg"
+              src="https://flowbite.s3.amazonaws.com/docs/gallery/square/image-11.jpg"
+              alt=""
+            />
+              <div class="absolute bottom-0 left-0 right-0 px-4 py-2 bg-gray-800 opacity-70">
+            <h3 class="text-xl text-white font-bold mb-4">
+            Bags</h3>
+           
+        </div>
+          </div>
+        </div>
+
+      </section>
       <section className=' bg-red-200 p-4'>
         <div className="flex justify-center">
           <h2 className="mb-4 mr-2 text-7xl tracking-tight  text-gray-900 dark:text-white">Features</h2>
@@ -156,83 +277,13 @@ export default function Homepage() {
         </div>
 
       </section>
-      {/* Product Gallery*/}
+        {/* Product Gallery*/}
+      {/* Features section*/}
+    
+    
 
 
-      <section className="bg-green-200 p-4 ">
-        <h1 className="text-7xl mx-auto text-center mb-8">Products</h1>
-
-        <Imageslider />
-        <div className="grid grid-cols-2  md:grid-cols-3 gap-4 p-8">
-          <div>
-            <img
-              className="h-auto max-w-full rounded-lg"
-              src="https://flowbite.s3.amazonaws.com/docs/gallery/square/image.jpg"
-              alt=""
-            />
-          </div>
-
-
-
-          <div>
-            <img
-              className="h-auto max-w-full rounded-lg"
-              src="https://flowbite.s3.amazonaws.com/docs/gallery/square/image-4.jpg"
-              alt=""
-            />
-          </div>
-          <div>
-            <img
-              className="h-auto max-w-full rounded-lg"
-              src="https://flowbite.s3.amazonaws.com/docs/gallery/square/image-5.jpg"
-              alt=""
-            />
-          </div>
-          <div>
-            <img
-              className="h-auto max-w-full rounded-lg"
-              src="https://flowbite.s3.amazonaws.com/docs/gallery/square/image-6.jpg"
-              alt=""
-            />
-          </div>
-          <div>
-            <img
-              className="h-auto max-w-full rounded-lg"
-              src="https://flowbite.s3.amazonaws.com/docs/gallery/square/image-7.jpg"
-              alt=""
-            />
-          </div>
-          <div>
-            <img
-              className="h-auto max-w-full rounded-lg"
-              src="https://flowbite.s3.amazonaws.com/docs/gallery/square/image-8.jpg"
-              alt=""
-            />
-          </div>
-          <div>
-            <img
-              className="h-auto max-w-full rounded-lg"
-              src="https://flowbite.s3.amazonaws.com/docs/gallery/square/image-9.jpg"
-              alt=""
-            />
-          </div>
-          <div>
-            <img
-              className="h-auto max-w-full rounded-lg"
-              src="https://flowbite.s3.amazonaws.com/docs/gallery/square/image-10.jpg"
-              alt=""
-            />
-          </div>
-          <div>
-            <img
-              className="h-auto max-w-full rounded-lg"
-              src="https://flowbite.s3.amazonaws.com/docs/gallery/square/image-11.jpg"
-              alt=""
-            />
-          </div>
-        </div>
-
-      </section>
+ 
 
 
 

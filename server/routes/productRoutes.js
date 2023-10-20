@@ -6,6 +6,7 @@ import {
   getSingleProductController,
   productPhotoController,
   updateProductController,
+  productFilterController
 } from "../controllers/productController.js";
 import { isAdmin, requireSignIn } from "../middlewares/authMiddleware.js";
 import formidable from "express-formidable";
@@ -40,5 +41,8 @@ router.get("/product-photo/:pid", productPhotoController);
 
 //delete rproduct
 router.delete("/product/:pid", deleteProductController);
+
+//fileter product
+router.post("/product-filter",productFilterController);
 
 export default router;

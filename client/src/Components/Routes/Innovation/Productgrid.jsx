@@ -8,11 +8,11 @@ const ProductGrid = ({products}) => {
   return (
 
 
-            <div class="grid grid-cols-2 md:grid-cols-3 gap-4">
+            <div class=" max-w-screen-2xl grid grid-cols-2 md:grid-cols-3 gap-4">
 
 
     {products.map((product)=>(
-     <div class="relative overflow-hidden w-full max-w-sm bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
+     <div class="relative overflow-hidden  max-w-sm bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
   {/* Ribbon */}
 
   <div class="absolute right-0 top-0 h-16 w-16">
@@ -22,16 +22,19 @@ const ProductGrid = ({products}) => {
     </div>
   </div>
      
-     <a href="#">
+     <a href={`/Dashboard/admin/product/${product.slug}`}>
        <img class="p-8 w-72 h-72 rounded-t-lg" src={`${import.meta.env.VITE_API_URL}/api/v1/product/product-photo/${product._id}`} alt="product image" />
      </a>
-     
+
      <div class="px-5 pb-5 mb-4">
        <a href="#">
          <h5 class="text-xl font-semibold tracking-tight text-gray-900 dark:text-white">{product.name}</h5>
        </a>
        <div class="flex items-center mt-2.5 mb-5">
-         <span class="bg-blue-100 text-blue-800 text-xs font-bold mr-2 py-0.5 rounded dark:bg-blue-200 dark:text-blue-800">{product.description}</span>
+<span class="bg-blue-100 text-blue-800 text-xs font-bold mr-2 py-0.5 rounded dark:bg-blue-200 dark-text-blue-800 whitespace-wrap max-w-xs">{product.description}</span>
+
+
+
        </div>
        <div class="flex items-center justify-between">
          <span class="text-3xl font-bold text-gray-900 dark:text-white">{product.price}$</span>

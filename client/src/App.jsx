@@ -18,8 +18,10 @@ import Orders from './Pages/user/Orders';
 import Profile from './Pages/user/Profile';
 import CategoryForm from './Components/Forms/CategoryForm';
 import Product from './Pages/Admin/Products';
+import UpdateProduct from "./Pages/Admin/UpdateProduct"
 import Drag from './Drag'
 import ProductGrid from './Components/Routes/Innovation/Productgrid';
+import ProductGallery from './Pages/ProductGallery';
 function App() {
 
 
@@ -35,6 +37,7 @@ function App() {
     <Route path='/Drag'element={<Drag/>}/>
     <Route path='/Test'element={<Test/>}/>
     <Route path='/Grid'element={<ProductGrid/>}/>
+    <Route path='/ProductGalllery'element={<ProductGallery/>}/>
     <Route path='/'element={<Homepage/>}/>
     <Route path='/Signup'element={<Signup/>}/>
     <Route path='/Login'element={<Login/>}/>
@@ -49,8 +52,9 @@ function App() {
     <Route  path="/Dashboard" element={<AdminRoutes/>}>
     <Route path='admin'element={<AdminDashboard/>}/>
     <Route path="admin/create-category" element={<CreateCategory />} />
-    <Route path="admin/create-product" element={<CreateProduct />} />
     <Route path="admin/product" element={<Product />} />
+    <Route path="admin/create-product" element={<CreateProduct />} />
+    <Route path="admin/product/:slug" element={<UpdateProduct />} />
     <Route path="admin/users" element={<Users />} />
 
 

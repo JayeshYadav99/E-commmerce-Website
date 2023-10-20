@@ -96,6 +96,7 @@ export const getSingleProductController = async (req, res) => {
 export const productPhotoController = async (req, res) => {
   try {
     const product = await productModel.findById(req.params.pid).select("photo");
+    res.setHeader('Cache-Control', 'no-store');
     if (product.photo.data) {
       res.set("Content-type", product.photo.contentType);
       return res.status(200).send(product.photo.data);
@@ -135,6 +136,8 @@ export const updateProductController = async (req, res) => {
       req.fields;
     const { photo } = req.files;
     //alidation
+    
+    console.log(category);
     switch (true) {
       case !name:
         return res.status(500).send({ error: "Name is Required" });
@@ -176,3 +179,31 @@ export const updateProductController = async (req, res) => {
     });
   }
 };
+//filetrs
+export const productFilterController =async(req,res)=>{
+  try {
+    const {radio,checked}=req.body;
+    console.log(typeof(radio));
+    let args={};
+    if(checked.length>0) args.category=checked;
+    if(radio.length) args.price={$gte:radio[0],$lte:radio[1]};
+    const allproducts=await productModel.find({});
+    
+    const compare=
+ allproducts.filter((product )=>{
+  console.log(product.price,radio[0]);
+       return  product.price > radio[0] && product.price<radio[1];
+      })
+    
+    console.log(compare)
+    const products= await productModel.find(args);
+    res.status(200).send({success:true,products});
+  } catch (error) {
+    console.log(error);
+    res.status(500).send({
+      success: false,
+      error,
+      message: "Error in Filtering product",
+    });
+  }
+}
