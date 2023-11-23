@@ -1,15 +1,30 @@
-import React, { useState,useEffect } from 'react'
+import React, { useState, useRef, useEffect,useCallback } from 'react'
 import { useAuth } from '../Context/Auth'
 import axios from "axios";
 import Layout from '../Components/Layout'
 import 'react-toastify/dist/ReactToastify.css';
 import {Prices}  from '../Components/Prices';
+import { BarLoader } from 'react-spinners';
+import { toast } from "react-toastify"
+import { useNavigate } from 'react-router-dom';
+import { useSearch } from "./../Context/Search";
+import Skeleton from 'react-loading-skeleton';
+import InfiniteScroll from 'react-infinite-scroll-component';
+import { useCart } from '../Context/Cart';
 const ProductGallery = () => {
+    const[cartItems,SetcartItems]=useCart();
+    const navigate=useNavigate()
+    const [searchQuery, setSearchQuery] = useSearch();
     const[products,Setproducts]=useState([]);
     const[categories,Setcategories]=useState([]);
+    const[Loading,SetLoading]=useState(false);
+    const[PageLoading,SetPageLoading]=useState(false);
     const [auth, SetAuth] = useAuth();
     const[checked,Setchecked]=useState([]);
     const [radio, setRadio] = useState([]);
+const[total,Settotal]=useState();
+const[page,Setpage]=useState(1);
+const observer = useRef()
     const [isSectionOpen, setIsSectionOpen] = useState({
         colorSection: false,
         categorySection: false,
@@ -26,13 +41,24 @@ const ProductGallery = () => {
     };
     const getAllproducts=async()=>{
         try {
-    
-          const {data}=await axios(`${import.meta.env.VITE_API_URL}/api/v1/product/get-product`);
+    SetLoading(true);
+    const keyword = searchQuery.keyword || 'all'; 
+    const { data } = await axios.post(
+        `${import.meta.env.VITE_API_URL}/api/v1/product/search/${keyword}/${searchQuery.page}`,
+        { checked, radio }
+      );
+      
+      
+          SetLoading(false);
+          Setpage(searchQuery.page);
           if(data.success)
           {
-            console.log(data.products[0].category.name);
-            console.log(data.products);
-    Setproducts(data.products);
+           
+            // console.log(data.products[0].category.name);
+            console.log(data);
+    Setproducts(data.result);
+ Settotal(data.resultCount || data.productsCount);
+    
           }
         
         } catch (error) {
@@ -55,28 +81,32 @@ const ProductGallery = () => {
           toast.error("Something went wrong fetching categories");
         }
       }
-       useEffect(() => {
+    //    useEffect(() => {
         
-        getAllproducts();
-      }, [])
+    //     getAllproducts();
+    //   }, [])
       useEffect(() => {
 
         getAllCategory();
       }, [])
       useEffect(() => {
-        if (checked.length || radio.length) Filterproduct();
+        if (checked.length || radio.length) getAllproducts(); Filterproduct();
       }, [checked, radio]);
 
       const handleSort = (sortBy) => {
-        Setproducts((prevProducts) => {
-          if (sortBy === "price-low-to-high") {
-            return prevProducts.slice().sort((a, b) => a.price - b.price);
-          } else if (sortBy === "price-high-to-low") {
-            return prevProducts.slice().sort((a, b) => b.price - a.price);
-          }
-          // Add more sorting options as needed
-          return prevProducts; // If an invalid option is provided, return the original array
-        });
+        // SetLoading(true);
+   
+          Setproducts((prevProducts) => {
+            if (sortBy === "price-low-to-high") {
+              return prevProducts.slice().sort((a, b) => a.price - b.price);
+            } else if (sortBy === "price-high-to-low") {
+              return prevProducts.slice().sort((a, b) => b.price - a.price);
+            }
+            // Add more sorting options as needed
+            return prevProducts; // If an invalid option is provided, return the original array
+          });
+    
+    
       };
       const handleFilter=(value,id)=>{
         let all=[...checked];
@@ -94,17 +124,46 @@ const ProductGallery = () => {
       }
       const Filterproduct=async()=>{
         try {
+
             const { data } = await axios.post (`${import.meta.env.VITE_API_URL}/api/v1/product/product-filter`,{
                 checked,radio
             });
-            Setproducts(data.products);
+            
+            // Setproducts(data.products);
             
         } catch (error) {
             console.log(error);
             
         }
       }
+    
+    const loadMoreProducts = async () => {
+        try {
+            console.log(page)
+           console.log(searchQuery.page)
+            SetPageLoading(true);
+            const { data } = await axios.post(
+                `${import.meta.env.VITE_API_URL}/api/v1/product/search/${searchQuery.keyword}/${page}`,
+                { checked, radio }
+              );
 
+            if (data.success) {
+                console.log(products);
+                SetPageLoading(false);
+                Setproducts((prevProducts) => [...prevProducts, ...data.result]);
+            }
+        } catch (error) {
+            console.log(error);
+            toast.error("Something went wrong loading more products");
+        }
+    };
+    useEffect(() => {
+        if (page === 1) return;
+        loadMoreProducts();
+      }, [page]);
+      useEffect(() => {
+        if (!checked.length || !radio.length) getAllproducts();
+      }, [checked.length, radio.length,searchQuery.keyword]);
     return (
         <Layout title={"All Products Gallery"}>
             <div className="bg-white ">
@@ -338,8 +397,10 @@ Off-canvas filters for mobile, show/hide based on off-canvas filters state.
                     </div>
 }
                     <main className="mx-auto max-w-7xl  ">
+                   
                         <div className="flex items-baseline justify-between border-b border-gray-200 pb-6 pt-8">
-                            <h1 className="text-4xl font-bold tracking-tight text-gray-900">New Arrivals</h1>
+                            <h1 className="text-4xl font-bold tracking-tight text-gray-900">New Arrivals                               </h1>
+                   
                             <div className="flex items-center">
                                 <div className="relative inline-block text-left">
                                     <div>
@@ -388,50 +449,75 @@ Off-canvas filters for mobile, show/hide based on off-canvas filters state.
                                     </svg>
                                 </button>
                             </div>
+                            
+                          
                         </div>
+                        <div className='flex  max-w-5xl justify-center ml-80 items-center'> {Loading && <BarLoader color="#36d7b7"  height={9} width="100%" />}</div>
                         <section aria-labelledby="products-heading" className="pb-24 pt-6">
+                      
                             <h2 id="products-heading" className="sr-only">Products</h2>
                             <div className="grid grid-cols-1 gap-x-8 gap-y-10 lg:grid-cols-4">
                                 {/* Filters */}
                                 <form className="hidden lg:block">
                                     <h3 className="sr-only">Categories</h3>
                                    
-                                    <div className="border-b border-gray-200  py-6">
-                                        <h3 className="-mx-2 -my-3 flow-root">
-                                            {/* Expand/collapse section button */}
-                                            <button
-                                                type="button"
-                                                className={`flex w-full items-center justify-between bg-white px-2 py-3 text-gray-400 hover:text-gray-500 `}
-                                                onClick={() => toggleSection("SizeSection")}
-                                                aria-controls="filter-section-mobile-0"
-                                            // aria-expanded={isSectionOpen}
-                                            >
-                                                <span className="font-medium text-gray-900">Price</span>
-                                                <span className="ml-6 flex items-center">
-                                                    {/* Expand icon, show/hide based on section open state. */}
-                                                    {!isSectionOpen.SizeSection ? (<svg className="h-10 w-5" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
-                                                        <path d="M10.75 4.75a.75.75 0 00-1.5 0v4.5h-4.5a.75.75 0 000 1.5h4.5v4.5a.75.75 0 001.5 0v-4.5h4.5a.75.75 0 000-1.5h-4.5v-4.5z" />
-                                                    </svg>) : (<svg className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
-                                                        <path fillRule="evenodd" d="M4 10a.75.75 0 01.75-.75h10.5a.75.75 0 010 1.5H4.75A.75.75 0 014 10z" clipRule="evenodd" />
-                                                    </svg>)}
-                                                </span>
-                                            </button>
-                                        </h3>
-                                        {/* Filter section, show/hide based on section state. */}
-                                        {isSectionOpen.SizeSection &&    <div className="pt-6" id="filter-section-mobile-2">
-                                            <div className="space-y-6">
-                                                {Prices.map((price)=>(
-                                                    <div className="flex items-center" key={price._id} >
-                                                    <input  id={`filter-mobile-size-${price._id}`} type="radio" name="prices[]" value={[price.array]} className="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500" onChange={(e) => {setRadio([e.target.value])
-                                                    console.log(e.target.value);}} />
-                                                    <label htmlFor="filter-mobile-size-0" className="ml-3 min-w-0 flex-1 text-gray-500">{price.name}</label>
-                                                </div>
-                                                ))}
-                                              
-                                            </div>
-                                        </div> }
-                                    
-                                    </div>
+                                    <div className="border-b border-gray-200 py-6">
+    <h3 className="-mx-2 -my-3 flow-root">
+        {/* Expand/collapse section button */}
+        <button
+            type="button"
+            className={`flex w-full items-center justify-between bg-white px-2 py-3 text-gray-400 hover:text-gray-500 `}
+            onClick={() => toggleSection("SizeSection")}
+            aria-controls="filter-section-mobile-0"
+        >
+            <span className="font-medium text-gray-900">Price</span>
+            <span className="ml-6 flex items-center">
+                {/* Expand icon, show/hide based on section open state. */}
+                {!isSectionOpen.SizeSection ? (
+                    <svg className="h-10 w-5" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                        <path d="M10.75 4.75a.75.75 0 00-1.5 0v4.5h-4.5a.75.75 0 000 1.5h4.5v4.5a.75.75 0 001.5 0v-4.5h4.5a.75.75 0 000-1.5h-4.5v-4.5z" />
+                    </svg>
+                ) : (
+                    <svg className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                        <path fillRule="evenodd" d="M4 10a.75.75 0 01.75-.75h10.5a.75.75 0 010 1.5H4.75A.75.75 0 014 10z" clipRule="evenodd" />
+                    </svg>
+                )}
+            </span>
+        </button>
+    </h3>
+    {/* Filter section, show/hide based on section state. */}
+    {isSectionOpen.SizeSection && (
+        <div className="pt-6" id="filter-section-mobile-2">
+            <div className="space-y-6">
+                {Prices.map((price) => {
+                    const priceValues = `${price.array}`.split(',').map(parseFloat);
+                    return (
+                        <div className="flex items-center" key={price._id}>
+                            <input
+                                id={`filter-mobile-size-${price._id}`}
+                                type="radio"
+                                name="prices[]"
+                                value={price.array}
+                                className="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
+                                onChange={() => {
+                                    setRadio(priceValues);
+                                    console.log(priceValues);
+                                }}
+                                checked={radio[0] === priceValues[0] && radio[1] === priceValues[1]}
+                            />
+                            <label htmlFor={`filter-mobile-size-${price._id}`} className="ml-3 min-w-0 flex-1 text-gray-500">
+                                {price.name}
+                            </label>
+                        </div>
+                    );
+                })}
+            </div>
+        </div>
+    )}
+</div>
+
+
+
                                     <div className="border-b border-gray-200 py-6">
                                         <h3 className="-mx-2 -my-3 flow-root">
                                             {/* Expand/collapse section button */}
@@ -528,35 +614,143 @@ Off-canvas filters for mobile, show/hide based on off-canvas filters state.
 
                                             </div>
                                         </div>}
-
+                                        <button
+                                                        className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+                                                        onClick={()=>window.location.reload()}
+                                                    >
+                                                        Reset Filters
+                                                    </button>
                                     </div>
                                  
                                 </form>
                                 {/* Product grid */}
+
+                              
                                 <div className="lg:col-span-3">
+                                    
                                 <div class="grid grid-cols-2 md:grid-cols-3 gap-4">
-          {products.map((product)=>(
-            <div class="w-full max-w-sm bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
-    <a href="#">
-        <img class="p-8 rounded-t-lg"  loading="lazy" src={`${import.meta.env.VITE_API_URL}/api/v1/product/product-photo/${product._id}`} alt="product image" />
-    </a>
-    <div class="px-5 pb-5">
-        <a href="#">
-            <h5 class="text-xl font-semibold tracking-tight text-gray-900 dark:text-white">{product?.name}</h5>
-        </a>
-        <div class="flex items-center mt-2.5 mb-5">
+                                {Loading && (
+  Array.from({ length: 6 }).map((_, index) => (
+    <div key={index} role="status" className="w-full max-w-sm bg-white border border-gray-200 rounded-lg shadow animate-pulse dark:bg-gray-800 dark:border-gray-700">
+      <div className="p-8 rounded-t-lg bg-center h-48 flex items-center justify-center" style={{ backgroundSize: 'contain', backgroundRepeat: 'no-repeat' }}>
+        <svg className="w-10 h-10 text-gray-200 dark:text-gray-600" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 16 20">
+          <path d="M14.066 0H7v5a2 2 0 0 1-2 2H0v11a1.97 1.97 0 0 0 1.934 2h12.132A1.97 1.97 0 0 0 16 18V2a1.97 1.97 0 0 0-1.934-2ZM10.5 6a1.5 1.5 0 1 1 0 2.999A1.5 1.5 0 0 1 10.5 6Zm2.221 10.515a1 1 0 0 1-.858.485h-8a1 1 0 0 1-.9-1.43L5.6 10.039a.978.978 0 0 1 .936-.57 1 1 0 0 1 .9.632l1.181 2.981.541-1a.945.945 0 0 1 .883-.522 1 1 0 0 1 .879.529l1.832 3.438a1 1 0 0 1-.031.988Z"/>
+          <path d="M5 5V.13a2.96 2.96 0 0 0-1.293.749L.879 3.707A2.98 2.98 0 0 0 .13 5H5Z"/>
+        </svg>
+      </div>
 
+      <div className="px-5 pb-5">
+        <div className="h-2.5 bg-gray-200 rounded-full dark:bg-gray-700 w-32 mb-2"></div>
+        <div className="w-48 h-2 bg-gray-200 rounded-full dark:bg-gray-700 mb-2"></div>
+        <div className="h-2 bg-gray-200 rounded-full dark:bg-gray-700 mb-2.5"></div>
+        <div className="h-2 bg-gray-200 rounded-full dark:bg-gray-700 mb-2.5"></div>
+        <div className="h-2 bg-gray-200 rounded-full dark:bg-gray-700 mb-2.5"></div>
+        
+        <div className="flex items-center mt-4">
+          <div className="w-10 h-10 me-3 bg-gray-200 dark:bg-gray-700 rounded-full"></div>
+          <div>
+            <div className="h-2.5 bg-gray-200 rounded-full dark:bg-gray-700 w-32 mb-2"></div>
+            <div className="w-48 h-2 bg-gray-200 rounded-full dark:bg-gray-700 mb-2"></div>
+          </div>
         </div>
-        <div class="flex items-center justify-between">
-            <span class="text-3xl font-bold text-gray-900 dark:text-white">{product?.price}$</span>
-            <a href="#" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Add to cart</a>
-        </div>
+        
+        <span className="sr-only">Loading...</span>
+      </div>
     </div>
+  ))
+)}
+
+
+                                {  products.map((product) => (
+
+    
+ 
+     <div className="w-full max-w-sm bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
+  <a href="#">
+<div
+  className="p-8 rounded-t-lg  bg-center h-48"
+  style={{
+    backgroundImage: `url(${product.photo.url})`,
+    backgroundSize: 'contain',
+    backgroundRepeat: 'no-repeat'
+  //   backgroundSize: 'contain',
+  }}
+>
+  {/* You can add an overlay or loading spinner here if needed */}
 </div>
-          )
+</a>
+<div className="px-5 pb-5">
+<button onClick={()=>navigate(`/product/${product?.slug}`)}>
+  <h5 className="text-xl font-semibold tracking-tight text-gray-900 dark:text-white">
+    {product?.name}
+  </h5>
+</button>
+<div className="flex items-center mt-2.5 mb-5">
+  {/* Add your content here */}
+</div>
+<div className="flex items-center justify-between">
+  <span className="text-3xl font-bold text-gray-900 dark:text-white">
+    {product?.price}$
+  </span>
+<button
+    onClick={() => {
+        SetcartItems((prev) => [...prev, product]);
+        localStorage.setItem("cart", JSON.stringify([...cartItems, product]));
+        toast.info("Product added to cart");
+    }}
+    className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover-bg-blue-700 dark:focus:ring-blue-800"
+>
+    Add to cart
+</button>
+</div>
+</div>
+</div>
+  
+  
+))}
+                                {PageLoading && (
+  Array.from({ length: 6 }).map((_, index) => (
+    <div key={index} role="status" className="w-full max-w-sm bg-white border border-gray-200 rounded-lg shadow animate-pulse dark:bg-gray-800 dark:border-gray-700">
+      <div className="p-8 rounded-t-lg bg-center h-48 flex items-center justify-center" style={{ backgroundSize: 'contain', backgroundRepeat: 'no-repeat' }}>
+        <svg className="w-10 h-10 text-gray-200 dark:text-gray-600" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 16 20">
+          <path d="M14.066 0H7v5a2 2 0 0 1-2 2H0v11a1.97 1.97 0 0 0 1.934 2h12.132A1.97 1.97 0 0 0 16 18V2a1.97 1.97 0 0 0-1.934-2ZM10.5 6a1.5 1.5 0 1 1 0 2.999A1.5 1.5 0 0 1 10.5 6Zm2.221 10.515a1 1 0 0 1-.858.485h-8a1 1 0 0 1-.9-1.43L5.6 10.039a.978.978 0 0 1 .936-.57 1 1 0 0 1 .9.632l1.181 2.981.541-1a.945.945 0 0 1 .883-.522 1 1 0 0 1 .879.529l1.832 3.438a1 1 0 0 1-.031.988Z"/>
+          <path d="M5 5V.13a2.96 2.96 0 0 0-1.293.749L.879 3.707A2.98 2.98 0 0 0 .13 5H5Z"/>
+        </svg>
+      </div>
 
-          )}
+      <div className="px-5 pb-5">
+        <div className="h-2.5 bg-gray-200 rounded-full dark:bg-gray-700 w-32 mb-2"></div>
+        <div className="w-48 h-2 bg-gray-200 rounded-full dark:bg-gray-700 mb-2"></div>
+        <div className="h-2 bg-gray-200 rounded-full dark:bg-gray-700 mb-2.5"></div>
+        <div className="h-2 bg-gray-200 rounded-full dark:bg-gray-700 mb-2.5"></div>
+        <div className="h-2 bg-gray-200 rounded-full dark:bg-gray-700 mb-2.5"></div>
+        
+        <div className="flex items-center mt-4">
+          <div className="w-10 h-10 me-3 bg-gray-200 dark:bg-gray-700 rounded-full"></div>
+          <div>
+            <div className="h-2.5 bg-gray-200 rounded-full dark:bg-gray-700 w-32 mb-2"></div>
+            <div className="w-48 h-2 bg-gray-200 rounded-full dark:bg-gray-700 mb-2"></div>
+          </div>
+        </div>
+        
+        <span className="sr-only">Loading...</span>
+      </div>
+    </div>
+  ))
+)}
 
+
+{products.length < total && (
+                    <button
+                        className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+                        onClick={(e) => {
+                            e.preventDefault();
+                            Setpage(page + 1);
+                          }}
+                    >
+                        Load More
+                    </button>
+                )}
 
 
 
@@ -564,6 +758,7 @@ Off-canvas filters for mobile, show/hide based on off-canvas filters state.
                                 </div>
                             </div>
                         </section>
+                        
                     </main>
                 </div>
             </div>

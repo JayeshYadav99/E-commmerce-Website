@@ -95,7 +95,7 @@ export const loginController = async (req, res) => {
         name: user.name,
         email: user.email,
         phone: user.phone,
-        adddress: user.address,
+        address: user.address,
         role:user.role
       },
       token,
@@ -157,3 +157,100 @@ export const testController = (req, res) => {
     res.send({ error });
   }
 };
+// editProfileController
+export const editProfileController = async (req, res) => {
+  try {
+    const userId = req.user._id; // Assuming you have middleware to extract user details from the token
+
+    const { name, email, phone, address } = req.body;
+
+    // Check if the user exists
+    const user = await userModel.findById(userId);
+
+    if (!user) {
+      return res.status(404).send({
+        success: false,
+        message: "User not found",
+      });
+    }
+
+    // Update user details
+    if (name) user.name = name;
+    if (email) user.email = email;
+    if (phone) user.phone = phone;
+    if (address) user.address = address;
+
+    // Save the updated user details
+    await user.save();
+
+    res.status(200).send({
+      success: true,
+      message: "Profile updated successfully",
+      user: {
+        _id: user._id,
+        name: user.name,
+        email: user.email,
+        phone: user.phone,
+        address: user.address,
+        role: user.role,
+      },
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(500).send({
+      success: false,
+      message: "Error updating profile",
+      error,
+    });
+  }
+};
+// updatePhoneController
+export const updatePhoneController = async (req, res) => {
+  try {
+    const userId = req.user._id; // Assuming you have middleware to extract user details from the token
+    const { phone } = req.body;
+
+    // Check if the user exists
+    const user = await userModel.findById(userId);
+
+    if (!user) {
+      return res.status(404).send({
+        success: false,
+        message: "User not found",
+      });
+    }
+
+    // Update phone number
+    if (phone) {
+      user.phone = phone;
+      // Save the updated user details
+      await user.save();
+
+      res.status(200).send({
+        success: true,
+        message: "Phone number updated successfully",
+        user: {
+          _id: user._id,
+          name: user.name,
+          email: user.email,
+          phone: user.phone,
+          address: user.address,
+          role: user.role,
+        },
+      });
+    } else {
+      return res.status(400).send({
+        success: false,
+        message: "Phone number is required for update",
+      });
+    }
+  } catch (error) {
+    console.log(error);
+    res.status(500).send({
+      success: false,
+      message: "Error updating phone number",
+      error,
+    });
+  }
+};
+

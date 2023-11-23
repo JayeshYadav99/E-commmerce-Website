@@ -6,9 +6,11 @@ import {toast } from "react-toastify"
 import 'react-toastify/dist/ReactToastify.css';
 import Logo from "../assets/online-shopping.png"
 import Profile from "../assets/profile.png"
+import SearchInput from './Forms/SearchInput';
+import { useCart } from '../Context/Cart';
 export default function Navbar() {
 
-
+const[cartItems,setCartItems]=useCart();
  const [auth,SetAuth]=useAuth();
 
  //Dropdowns
@@ -110,7 +112,7 @@ const handleLogout=()=>{
                 ShopSage
               </span>
      
-            <form action="#" method="GET" className="hidden lg:block lg:pl-2">
+            {/* <form action="#" method="GET" className="hidden lg:block lg:pl-2">
               <label htmlFor="topbar-search" className="sr-only">
                 Search
               </label>
@@ -137,11 +139,13 @@ const handleLogout=()=>{
                   placeholder="Search"
                 />
               </div>
-            </form>
+            </form> */}
           </div>
+          <SearchInput/>
           <div className="flex items-center lg:order-2">
           <ul className="flex space-x-4 px-4">
       <li>
+        
         <NavLink
           to="/"
           exact
@@ -191,11 +195,45 @@ const handleLogout=()=>{
           Category
         </NavLink>
       </li>
+      <li>
+  <NavLink
+    to="/cart"
+    activeClassName="text-indigo-500" // Apply active styling here
+    className="text-white hover:text-red-200 relative flex items-center"
+  >
+    {/* FontAwesome Shopping Cart Icon */}
+
+      <div class="absolute mt-2  mr-8 py-2">
+        <div class="t-0 absolute left-3">
+          {cartItems.length > 0 && (
+            <p class="flex h-2 w-2 items-center justify-center rounded-full bg-red-500 p-3 text-xs">
+              {cartItems.length}
+            </p>
+          )}
+        </div>
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke-width="1.5"
+          stroke="currentColor"
+          class="file: mt-4 h-6 w-6"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            d="M2.25 3h1.386c.51 0 .955.343 1.087.835l.383 1.437M7.5 14.25a3 3 0 00-3 3h15.75m-12.75-3h11.218c1.121-2.3 2.1-4.684 2.924-7.138a60.114 60.114 0 00-16.536-1.84M7.5 14.25L5.106 5.272M6 20.25a.75.75 0 11-1.5 0 .75.75 0 011.5 0zm12.75 0a.75.75 0 11-1.5 0 .75.75 0 011.5 0z"
+          />
+        </svg>
+      </div>
+  
+  </NavLink>
+</li>
     </ul>
 
             <button
               type="button"
-              className="hidden sm:inline-flex items-center justify-center text-white  bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:ring-primary-300 font-medium rounded-lg text-xl px-3 py-1.5 mr-2 dark:bg-primary-600 dark:hover:bg-primary-700 focus:outline-none dark:focus:ring-primary-800"
+              className="hidden sm:inline-flex items-center justify-center text-white ml-8  bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:ring-primary-300 font-medium rounded-lg text-xl px-3 py-1.5 mr-2 dark:bg-primary-600 dark:hover:bg-primary-700 focus:outline-none dark:focus:ring-primary-800"
             >
               <svg
                 aria-hidden="true"
@@ -576,12 +614,20 @@ const handleLogout=()=>{
                 className="py-1 font-light text-gray-500 dark:text-gray-400"
                 aria-labelledby="dropdown"
               >
+                 <li>
+                  <Link
+                    to="/Dashboard/user/profile"
+                    className="block py-2 px-4 text-sm hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-400 dark:hover:text-white"
+                  >
+                    My profile
+                  </Link>
+                </li>
                 <li>
                   <Link
                     to={auth?.user?.role ===1 ? "/Dashboard/admin" :"/Dashboard/user"}
                     className="block py-2 px-4 text-sm hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-400 dark:hover:text-white"
                   >
-                    My profile
+                   Admin Dashboard
                   </Link>
                 </li>
                 <li>

@@ -18,7 +18,7 @@ const Product = () => {
       const {data}=await axios(`${import.meta.env.VITE_API_URL}/api/v1/product/get-product`);
       if(data.success)
       {
-        console.log(data.products[0].category.name);
+        console.log(data.products[0].photo.url);
         console.log(data.products);
 Setproducts(data.products);
       }
@@ -140,7 +140,7 @@ Setproducts(data.products);
                </td>
                <th scope="row" className="flex items-center px-4 py-2  mt-2 font-medium text-gray-900 whitespace-nowrap dark:text-white">
                <img
-  src={`${import.meta.env.VITE_API_URL}/api/v1/product/product-photo/${product._id}?cache=${Math.random()}`}
+  src={product?.photo?.url}
   alt="product"
   className="w-auto h-12 mr-3 mb-4"
 />

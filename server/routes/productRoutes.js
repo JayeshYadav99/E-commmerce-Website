@@ -1,4 +1,6 @@
 import express from "express";
+import multer from 'multer'
+// import singleUpload from "../middlewares/multer.js";
 import {
   createProductController,
   deleteProductController,
@@ -6,20 +8,33 @@ import {
   getSingleProductController,
   productPhotoController,
   updateProductController,
-  productFilterController
+  productFilterController,createProductControllercloud, ProductListController, SearchProductController, RelatedProductController
 } from "../controllers/productController.js";
 import { isAdmin, requireSignIn } from "../middlewares/authMiddleware.js";
 import formidable from "express-formidable";
-
+import bodyParser from 'body-parser';
 const router = express.Router();
 
-//routes
+
 router.post(
   "/create-product",
   requireSignIn,
   isAdmin,
   formidable(),
+
+
   createProductController
+);
+router.post(
+  "/create-product-cloud",
+  requireSignIn,
+  isAdmin,
+
+ formidable(),
+ 
+ 
+
+  createProductControllercloud
 );
 //routes
 router.put(
@@ -44,5 +59,9 @@ router.delete("/product/:pid", deleteProductController);
 
 //fileter product
 router.post("/product-filter",productFilterController);
+router.get("/product-page/:page",ProductListController);
+router.post("/search/:keyword/:page",SearchProductController);
+//fetch similar products
+router.get("/get-similar-product/:pid/:cid",RelatedProductController);
 
 export default router;

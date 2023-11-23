@@ -23,7 +23,7 @@ const ProductGrid = ({products}) => {
   </div>
      
      <a href={`/Dashboard/admin/product/${product.slug}`}>
-       <img class="p-8 w-72 h-72 rounded-t-lg" src={`${import.meta.env.VITE_API_URL}/api/v1/product/product-photo/${product._id}`} alt="product image" />
+       <img class="p-8 w-72 h-72 rounded-t-lg" src={product.photo.url} alt="product image" />
      </a>
 
      <div class="px-5 pb-5 mb-4">

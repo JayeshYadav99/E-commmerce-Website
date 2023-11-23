@@ -22,6 +22,11 @@ import UpdateProduct from "./Pages/Admin/UpdateProduct"
 import Drag from './Drag'
 import ProductGrid from './Components/Routes/Innovation/Productgrid';
 import ProductGallery from './Pages/ProductGallery';
+import SearchInput from './Components/Forms/SearchInput';
+import SearchPage from './Pages/SearchPage';
+import Productdetails from './Pages/Productdetails';
+import CartPage from './Pages/CartPage';
+import PhoneSignUp from './Pages/UpdatePhoneNumber';
 function App() {
 
 
@@ -36,6 +41,10 @@ function App() {
     <Route path='/Test'element={<Test/>}/>
     <Route path='/Drag'element={<Drag/>}/>
     <Route path='/Test'element={<Test/>}/>
+    <Route path='/Search'element={<SearchPage/>}/>
+    <Route path='/cart'element={<CartPage/>}/>
+    <Route path='/product/:slug'element={<Productdetails/>}/>
+  <Route path='/edit-phone' element={<PhoneSignUp/>} />
     <Route path='/Grid'element={<ProductGrid/>}/>
     <Route path='/ProductGalllery'element={<ProductGallery/>}/>
     <Route path='/'element={<Homepage/>}/>

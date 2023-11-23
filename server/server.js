@@ -7,18 +7,26 @@ import authRoutes from "./routes/authRoute.js";
 import categoryRoutes from "./routes/categoryRoutes.js";
 import productRoutes from "./routes/productRoutes.js";
 import cors from "cors";
-
+import cloudinary from "cloudinary"
+import bodyParser from 'body-parser';
 //configure env
 dotenv.config();
 
 //databse config
 connectDB();
+cloudinary.v2.config({
+  cloud_name:"difz9x1sc",
+  api_key:"228477943368782",
+  api_secret:"3WmnFnJmOIzAhoKj_hlfYiH48Zg"
+})
 
 //rest object
 const app = express();
 
 //middelwares
+// 
 app.use(express.json());
+
 app.use(cors());
 app.use(morgan("dev"));
 

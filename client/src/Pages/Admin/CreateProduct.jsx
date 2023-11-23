@@ -45,7 +45,7 @@ const handleOnSubmit=async(e)=>{
     formData.append('category', category);
     formData.append('shipping', shipping);
     formData.append('photo', imageFile);
-    const response=await axios.post(`${import.meta.env.VITE_API_URL}/api/v1/product/create-product`,formData, {
+    const response=await axios.post(`${import.meta.env.VITE_API_URL}/api/v1/product/create-product-cloud`,formData, {
       headers: {
         'Content-Type': 'multipart/form-data', // Set the content type for file upload
       }});

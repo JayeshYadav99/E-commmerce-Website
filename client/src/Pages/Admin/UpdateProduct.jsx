@@ -68,7 +68,7 @@ const getSingleProduct=async()=>{
         if(data.success)
         {
           console.log(data.product.category.name);
-          console.log(data.product);
+          console.log(data.product.photo);
           const{product}=data;
   Setname(product.name);
   Setdescription(product.description);
@@ -199,7 +199,7 @@ navigate('/Dashboard/admin/product');
               <div>
                 <label htmlFor="shipping" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Shipping</label>
                 <input type="text" name="shipping" id="shipping"
-                       value={shipping ? "Yes":"No"}
+                       value={shipping }
                        onChange={(e)=>Setshipping(e.target.value)}
                 className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" placeholder="$2999" required />
               </div>
@@ -242,7 +242,7 @@ navigate('/Dashboard/admin/product');
                 ) : (
                   <div className="text-center">
                     <img
-                      src={`${import.meta.env.VITE_API_URL}/api/v1/product/product-photo/${Product?._id}`}
+                      src={Product?.photo?.url}
                       alt="product_photo"
                       height={"200px"}
                       className="img img-responsive"
