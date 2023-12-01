@@ -9,7 +9,7 @@ import { toast } from "react-toastify"
 import { useNavigate } from 'react-router-dom';
 import { useSearch } from "./../Context/Search";
 import Skeleton from 'react-loading-skeleton';
-import InfiniteScroll from 'react-infinite-scroll-component';
+
 import { useCart } from '../Context/Cart';
 const ProductGallery = () => {
     const[cartItems,SetcartItems]=useCart();
@@ -157,6 +157,31 @@ const observer = useRef()
             toast.error("Something went wrong loading more products");
         }
     };
+ 
+    const handleAddToCart = async (product) => {
+        if (!auth) return navigate("/login");
+       
+
+        try {
+            const {data}=await axios.put( `${import.meta.env.VITE_API_URL}/api/v1/cart/${auth.user._id}`, { productId: product._id, quantity: 1, action: 'addItem' } );
+            console.log(data);
+            SetcartItems((prevCartItems) => [...data.items]);
+            toast.success("Product added to cart");
+            localStorage.setItem("cart", JSON.stringify(data.items));
+            
+        } catch (error) {
+            console.log(error);
+            
+        }
+
+
+            }
+
+
+
+
+
+
     useEffect(() => {
         if (page === 1) return;
         loadMoreProducts();
@@ -659,7 +684,7 @@ Off-canvas filters for mobile, show/hide based on off-canvas filters state.
     </div>
   ))
 )}
-
+  {JSON.stringify(cartItems)}
 
                                 {  products.map((product) => (
 
@@ -694,9 +719,7 @@ Off-canvas filters for mobile, show/hide based on off-canvas filters state.
   </span>
 <button
     onClick={() => {
-        SetcartItems((prev) => [...prev, product]);
-        localStorage.setItem("cart", JSON.stringify([...cartItems, product]));
-        toast.info("Product added to cart");
+        handleAddToCart (product);
     }}
     className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover-bg-blue-700 dark:focus:ring-blue-800"
 >

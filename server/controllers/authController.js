@@ -1,7 +1,21 @@
 import userModel from "../models/userModel.js";
+import cartModel from "../models/cartModel.js";
 import { comparePassword, hashPassword } from "./../helpers/authHelper.js";
 import JWT from "jsonwebtoken";
+const createEmptyCartForUser = async (user) => {
+  try {
+    const newCart = await cartModel.create({ user: user._id, items: [] });
 
+    // Add a reference to the cart in the user model
+    user.cart = newCart._id;
+    await user.save();
+
+    return newCart;
+  } catch (error) {
+    console.log(error);
+    throw new Error('Error creating cart for user');
+  }
+};
 export const registerController = async (req, res) => {
   try {
     const { name, email, password, phoneno, Address ,SecurityAnswer} = req.body;
@@ -41,6 +55,7 @@ export const registerController = async (req, res) => {
       password: hashedPassword,
       SecurityAnswer
     });
+    await createEmptyCartForUser(user);
 
     res.status(201).send({
       success: true,

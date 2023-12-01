@@ -1,0 +1,43 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "Start Client",
+            "type": "shell",
+            "options": {
+                "cwd": "${workspaceFolder}/client"
+              },
+            "command": "npm run dev ",
+            "windows": {
+                "command": "npm run dev"
+            },
+            "group": "none",
+            "presentation": {
+                "reveal": "always",
+                "panel": "new"
+            },
+            "runOptions": {
+                "runOn": "folderOpen",
+            }
+        },
+        {
+            "label": "Start Server",
+            "type": "shell",
+            "options": {
+                "cwd": "${workspaceFolder}/server"
+              },
+            "command": "npm run start",
+            "windows": {
+                "command": "npm run start"
+            },
+            "group": "none",
+            "presentation": {
+                "reveal": "always",
+                "panel": "new"
+            },
+            "runOptions": {
+                "runOn": "folderOpen",
+            }
+        }
+    ]
+}

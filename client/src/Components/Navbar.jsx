@@ -205,7 +205,7 @@ const handleLogout=()=>{
 
       <div class="absolute mt-2  mr-8 py-2">
         <div class="t-0 absolute left-3">
-          {cartItems.length > 0 && (
+          {cartItems && cartItems.length > 0 && (
             <p class="flex h-2 w-2 items-center justify-center rounded-full bg-red-500 p-3 text-xs">
               {cartItems.length}
             </p>

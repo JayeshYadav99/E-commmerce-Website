@@ -27,9 +27,20 @@ import SearchPage from './Pages/SearchPage';
 import Productdetails from './Pages/Productdetails';
 import CartPage from './Pages/CartPage';
 import PhoneSignUp from './Pages/UpdatePhoneNumber';
+import { useEffect,useState } from 'react';
+import Payment from './Pages/Payment';
+import PaymentCheckout from './Pages/PaymentCheckout';
+import axios from 'axios';
 function App() {
+const[stripeapikey,setStripeapikey]=useState('');
+async function getStripeApiKey(){
+  const {data}=await axios.get(`${import.meta.env.VITE_API_URL}/api/v1/payment/stripeapikey`);
+  setStripeapikey(data.stripeapikey);
+}
 
-
+useEffect(()=>{
+  getStripeApiKey();
+},[])
   return (
     <div className='max-h-screen' >
       
@@ -46,7 +57,9 @@ function App() {
     <Route path='/product/:slug'element={<Productdetails/>}/>
   <Route path='/edit-phone' element={<PhoneSignUp/>} />
     <Route path='/Grid'element={<ProductGrid/>}/>
-    <Route path='/ProductGalllery'element={<ProductGallery/>}/>
+    <Route path='/ProductGallery'element={<ProductGallery/>}/>
+    <Route path='/Payment'element={<Payment/>}/>
+    <Route path='/PaymentCheckout'element={<PaymentCheckout/>}/>
     <Route path='/'element={<Homepage/>}/>
     <Route path='/Signup'element={<Signup/>}/>
     <Route path='/Login'element={<Login/>}/>

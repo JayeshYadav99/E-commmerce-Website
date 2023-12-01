@@ -388,3 +388,44 @@ export const RelatedProductController = async (req, res) => {
     });
   }
 }
+
+export const getCartProductController = async (req, res) => {
+  try {
+    const {cart}=req.body;
+    console.log(cart)
+    const products=await productModel.find({_id:{$in:cart}}).populate('category');
+    res.status(200).send({
+      success: true,
+      products, 
+      message: "Cart Product fetched successfully",
+    });
+
+  } catch (error) {
+    console.log(error);
+    res.status(500).send({
+      success: false,
+      message: "Error while fetching cart product",
+      error,
+    });
+  }
+}
+export const createCartProductController = async (req, res) => {
+  try {
+    const {cart}=req.body;
+    console.log(cart)
+    const products=await productModel.find({_id:{$in:cart}}).populate('category');
+    res.status(200).send({
+      success: true,
+      products, 
+      message: "Cart Product fetched successfully",
+    });
+
+  } catch (error) {
+    console.log(error);
+    res.status(500).send({
+      success: false,
+      message: "Error while fetching cart product",
+      error,
+    });
+  }
+}
