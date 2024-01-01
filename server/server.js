@@ -98,7 +98,7 @@ app.use("/api/v1/payment",paymentRoute);
 
 
 //rest api
-app.get("/", (req, res) => {
+app.get("/montior", (req, res) => {
   res.send("<h1>Welcome to ecommerce app</h1>");
 });
 // server.js
