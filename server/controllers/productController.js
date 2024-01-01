@@ -287,7 +287,7 @@ export const productFilterController = async (req, res) => {
 };
 export const SearchProductController = async (req, res) => {
   try {
-    const perPage = 2;
+    const perPage = 6;
     const pageNumber = req.params.page || 1;
     const { keyword } = req.params;
     const { checked, radio } = req.body;
@@ -339,35 +339,35 @@ export const SearchProductController = async (req, res) => {
   }
 };
 
-export const ProductListController = async (req, res) => {
-  try {
-    const perPage=6;
-    const page=req.params.page||1;
-    console.log(page);
-    const products = await productModel
-  .find({})
-  .sort({ createdAt: -1, _id: -1 })
-  .skip((page - 1) * perPage)
-  .limit(perPage);
+// export const ProductListController = async (req, res) => {
+//   try {
+//     const perPage=6;
+//     const page=req.params.page||1;
+//     console.log(page);
+//     const products = await productModel
+//   .find({})
+//   .sort({ createdAt: -1, _id: -1 })
+//   .skip((page - 1) * perPage)
+//   .limit(perPage);
 
-    const productscount=await productModel.estimatedDocumentCount();
-console.log(productscount)
-console.log(products)
-;    res.status(200).send({
-      success: true,
-      products,
-      productscount,
-      message: "Product Paged successfully",
-    });
-  } catch (error) {
-    console.log(error);
-    res.status(500).send({
-      success: false,
-      message: "Error while paging product",
-      error,
-    });
-  }
-};
+//     const productscount=await productModel.estimatedDocumentCount();
+// console.log(productscount)
+// console.log(products)
+// ;    res.status(200).send({
+//       success: true,
+//       products,
+//       productscount,
+//       message: "Product Paged successfully",
+//     });
+//   } catch (error) {
+//     console.log(error);
+//     res.status(500).send({
+//       success: false,
+//       message: "Error while paging product",
+//       error,
+//     });
+//   }
+// };
 export const RelatedProductController = async (req, res) => {
   try {
     

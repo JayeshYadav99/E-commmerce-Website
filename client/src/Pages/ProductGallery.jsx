@@ -684,7 +684,7 @@ Off-canvas filters for mobile, show/hide based on off-canvas filters state.
     </div>
   ))
 )}
-  {JSON.stringify(cartItems)}
+
 
                                 {  products.map((product) => (
 

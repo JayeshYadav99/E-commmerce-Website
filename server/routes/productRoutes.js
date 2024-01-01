@@ -8,7 +8,7 @@ import {
   getSingleProductController,
   productPhotoController,
   updateProductController,
-  productFilterController,createProductControllercloud, ProductListController, SearchProductController, RelatedProductController
+  productFilterController,createProductControllercloud, SearchProductController, RelatedProductController
 } from "../controllers/productController.js";
 import { isAdmin, requireSignIn } from "../middlewares/authMiddleware.js";
 import formidable from "express-formidable";
@@ -59,7 +59,7 @@ router.delete("/product/:pid", deleteProductController);
 
 //fileter product
 router.post("/product-filter",productFilterController);
-router.get("/product-page/:page",ProductListController);
+// router.get("/product-page/:page",ProductListController);
 router.post("/search/:keyword/:page",SearchProductController);
 //fetch similar products
 router.get("/get-similar-product/:pid/:cid",RelatedProductController);

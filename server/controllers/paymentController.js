@@ -6,6 +6,7 @@ console.log(process.env.STRIPE_API_SECRET);
 
 // Controller function for processing payments
 export const processPayment = async (req, res) => {
+  console.log(req.body.amount);
     const myPayment = await stripeInstance.paymentIntents.create({
         amount: req.body.amount,
         currency: "inr",
@@ -65,7 +66,7 @@ export const processPayment = async (req, res) => {
         // });
         const price = await stripeInstance.prices.create({
           currency: 'inr',
-          unit_amount:total*100,
+          unit_amount:Math.ceil(total*100),
           
           product_data: {
             name: 'Total amount',

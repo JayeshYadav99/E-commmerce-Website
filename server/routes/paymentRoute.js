@@ -11,7 +11,7 @@ router.post('/create-intent', PaymentIntent);
 router.get('/stripeapikey', sendStripeApiKey);
 router.post('/webhook', (request, response) => {
   
-    
+    console.log("called");
     const sig = request.headers['stripe-signature'];
 
     let event;
