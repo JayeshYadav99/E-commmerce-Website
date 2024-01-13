@@ -1,7 +1,7 @@
 
 import React from "react";
-import Layout from "../Components/Layout/Layout";
-import { useSearch } from "./../Context/Search";
+import Layout from "../../Components/Layout/Layout";
+import { useSearch } from "../../Context/Search";
 
 const Search = () => {
     const [searchQuery, setSearchQuery] = useSearch();

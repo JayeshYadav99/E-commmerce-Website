@@ -1,5 +1,5 @@
 import React,{useEffect,useState} from "react";
-import AdminMenu from "../../Components/AdminMenu";
+import AdminMenu from "../../Components/Menu/AdminMenu";
 import { NavLink,Link } from 'react-router-dom'
 import Layout from '../../Components/Layout/Layout'
 import {toast } from "react-toastify"

@@ -1,8 +1,8 @@
 import React from 'react';
 import { NavLink, Link } from 'react-router-dom';
-import Profileimg from '../assets/profile.png';
-import Profile from '../Pages/user/Profile';
-import  Layout from "./Layout/Layout"
+import Profileimg from '../../assets/profile.png';
+import Profile from '../../Pages/user/Profile';
+import  Layout from "../Layout/Layout"
 import { Outlet } from 'react-router-dom';
 import { useLocation } from 'react-router-dom';
 const UserMenu = () => {

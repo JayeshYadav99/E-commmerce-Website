@@ -1,12 +1,12 @@
 
 import './App.css'
 import {Routes,Route} from 'react-router-dom';
-import Test from './Test';
+import Test from './Components/Utility/Test';
 import Navbar from './Components/Layout/Navbar';
-import Homepage from './Pages/Homepage';
+import Homepage from './Pages/Home/Homepage';
 import Signup from './Pages/Auth/Signup'
 import Login from './Pages/Auth/Login'
-import {Dashboard }from "./Pages/Dashboard"
+
 import PrivateRoutes from './Components/Routes/PrivateRoutes';
 import Forgotpassword from './Pages/Auth/Forgotpassword';
 import AdminRoutes from './Components/Routes/AdminRoutes';
@@ -19,21 +19,20 @@ import Profile from './Pages/user/Profile';
 import CategoryForm from './Components/Forms/CategoryForm';
 import Product from './Pages/Admin/Products';
 import UpdateProduct from "./Pages/Admin/UpdateProduct"
-import Drag from './Drag'
+
 import ProductGrid from './Components/Routes/Innovation/Productgrid';
-import ProductGallery from './Pages/ProductGallery';
+import ProductGallery from './Pages/Product/ProductGallery';
 import SearchInput from './Components/Forms/SearchInput';
-import SearchPage from './Pages/SearchPage';
-import Productdetails from './Pages/Productdetails';
-import CartPage from './Pages/CartPage';
-import PhoneSignUp from './Pages/UpdatePhoneNumber';
+import SearchPage from './Pages/Product/SearchPage';
+import Productdetails from './Pages/Product/Productdetails';
+import CartPage from './Pages/Cart/CartPage';
+import PhoneSignUp from './Pages/user/UpdatePhoneNumber';
 import { useEffect,useState } from 'react';
-import Payment from './Pages/Payment';
-import PaymentCheckout from './Pages/PaymentCheckout';
+import PaymentCheckout from './Pages/Cart/PaymentCheckout';
 import axios from 'axios';
-import OrderSuccessPage from './Pages/OrderSuccessPage';
-import UserMenu from './Components/UserMenu';
-import OrderDetailsPage from './Pages/OrderDetailsPage';
+import OrderSuccessPage from './Pages/Cart/OrderSuccessPage';
+import UserMenu from './Components/Menu/UserMenu';
+import OrderDetailsPage from './Pages/Cart/OrderDetailsPage';
 function App() {
 const[stripeapikey,setStripeapikey]=useState('');
 async function getStripeApiKey(){
@@ -57,7 +56,7 @@ useEffect(()=>{
   //Checking Component Routes
   <Route path='/UserMenu'element={<UserMenu/>}/>
     <Route path='/Test'element={<Test/>}/>
-    <Route path='/Drag'element={<Drag/>}/>
+   
     <Route path='/Test'element={<Test/>}/>
     <Route path='/Search'element={<SearchPage/>}/>
     <Route path='/cart'element={<CartPage/>}/>
@@ -66,7 +65,7 @@ useEffect(()=>{
   <Route path='/edit-phone' element={<PhoneSignUp/>} />
     <Route path='/Grid'element={<ProductGrid/>}/>
     <Route path='/ProductGallery'element={<ProductGallery/>}/>
-    <Route path='/Payment'element={<Payment/>}/>
+
     <Route path='/PaymentCheckout'element={<PaymentCheckout/>}/>
     <Route path='/'element={<Homepage/>}/>
     <Route path='/Signup'element={<Signup/>}/>

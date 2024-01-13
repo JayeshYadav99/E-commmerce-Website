@@ -1,16 +1,16 @@
 import React, { useState, useRef, useEffect,useCallback } from 'react'
-import { useAuth } from '../Context/Auth'
+import { useAuth } from '../../Context/Auth'
 import axios from "axios";
-import Layout from '../Components/Layout/Layout'
+import Layout from '../../Components/Layout/Layout'
 import 'react-toastify/dist/ReactToastify.css';
-import {Prices}  from '../Components/Prices';
+import {Prices}  from '../../Components/Utility/Prices';
 import { BarLoader } from 'react-spinners';
 import { toast } from "react-toastify"
 import { useNavigate } from 'react-router-dom';
-import { useSearch } from "./../Context/Search";
+import { useSearch } from "../../Context/Search";
 import Skeleton from 'react-loading-skeleton';
 
-import { useCart } from '../Context/Cart';
+import { useCart } from '../../Context/Cart';
 const ProductGallery = () => {
     const[cartItems,SetcartItems]=useCart();
     const navigate=useNavigate()

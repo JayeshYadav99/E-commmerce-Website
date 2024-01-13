@@ -1,14 +1,13 @@
 import React from 'react'
-import Layout from '../Components/Layout/Layout'
+import Layout from '../../Components/Layout/Layout'
 import {useState,useEffect} from 'react'
 import { useParams } from 'react-router-dom'
 import axios from 'axios'
-import ProfileImg from "../assets/profile.png"
-import { useAuth } from '../Context/Auth'
-import CheckoutSteps from '../Components/CheckoutSteps'
-// import Stepper from 'react-stepper-horizontal';
+
+import { useAuth } from '../../Context/Auth'
+
 import { Stepper } from 'react-form-stepper';
-import { FaCheckCircle } from "react-icons/fa";
+
 import { Link } from 'react-router-dom'
 const OrderDetailsPage = () => {
   const steps = [

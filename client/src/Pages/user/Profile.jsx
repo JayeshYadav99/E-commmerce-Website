@@ -1,6 +1,6 @@
 import React, { useState ,useEffect} from 'react';
 import { FiEdit } from 'react-icons/fi';
-import UserMenu from '../../Components/UserMenu';
+import UserMenu from '../../Components/Menu/UserMenu';
 import Layout from '../../Components/Layout/Layout';
 import { useAuth } from '../../Context/Auth';
 import { Link,useNavigate } from 'react-router-dom';

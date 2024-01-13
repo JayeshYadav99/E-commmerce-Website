@@ -1,8 +1,8 @@
 import React from 'react'
 
-import Imageslider from '../Components/Imageslider'
-import { useAuth } from '../Context/Auth'
-import Layout from '../Components/Layout/Layout'
+import Imageslider from '../../Components/Utility/Imageslider'
+import { useAuth } from '../../Context/Auth'
+import Layout from '../../Components/Layout/Layout'
 export default function Homepage() {
   const[auth,SetAuth]=useAuth();
 

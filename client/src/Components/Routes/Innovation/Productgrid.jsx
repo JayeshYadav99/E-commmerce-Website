@@ -1,6 +1,6 @@
 import React ,{useState}from 'react'
 
-import AdminMenu from "../../AdminMenu";
+import AdminMenu from "../../Menu/AdminMenu";
 import { NavLink,Link } from 'react-router-dom'
 import Layout from '../../Layout/Layout'
 const ProductGrid = ({products}) => {

@@ -2,7 +2,7 @@ import {useState,useEffect} from 'react'
 import {useAuth} from  '../../Context/Auth'
 import axios from 'axios'
 import {Outlet} from "react-router-dom";
-import Loader from "../Loader";
+import Loader from "../Utility/Loader";
 const AdminRoutes = () => {
     const[isAuthenticated,SetisAuthenticated]=useState(false);
     const[auth,SetAuth]=useAuth();

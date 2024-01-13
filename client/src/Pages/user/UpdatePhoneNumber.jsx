@@ -1,12 +1,12 @@
 import { useEffect, useState } from "react";
 import StyledFirebaseAuth from "react-firebaseui/StyledFirebaseAuth";
-import{auth} from "../firebase";
+import{auth} from "../Firebase/firebase";
 import "firebase/compat/auth";
 import firebase from 'firebase/compat/app'
 import { Link, useParams ,useNavigate, useLocation} from "react-router-dom";
 import { onAuthStateChanged, signOut,PhoneAuthProvider } from "firebase/auth";
 import axios from "axios"
-import { useAuth } from "../Context/Auth";
+import { useAuth } from "../../Context/Auth";
 export default function SignInScreen(props) {
  
   const config = {

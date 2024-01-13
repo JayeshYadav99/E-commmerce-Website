@@ -1,5 +1,5 @@
 import React ,{useState,useEffect} from 'react'
-import UserMenu from '../../Components/UserMenu'
+import UserMenu from '../../Components/Menu/UserMenu'
 import Layout from '../../Components/Layout/Layout'
 import axios from 'axios'
 import { useAuth } from '../../Context/Auth'

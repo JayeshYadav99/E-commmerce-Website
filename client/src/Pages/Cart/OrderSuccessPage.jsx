@@ -1,8 +1,8 @@
 import React from "react";
 
 import Lottie from "react-lottie";
-import animationData from "../assets/107043-success.json"
-import Layout from "../Components/Layout/Layout";
+import animationData from "../../assets/107043-success.json"
+import Layout from "../../Components/Layout/Layout";
 const OrderSuccessPage = () => {
   return (
     <div>

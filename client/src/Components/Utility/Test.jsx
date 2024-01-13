@@ -1,5 +1,5 @@
 import React from 'react'
-import Layout from './Components/Layout/Layout';
+import Layout from '../Layout/Layout';
 import { BarLoader } from 'react-spinners';
 export default function Test() {
   return (

@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-import { useCart } from '../Context/Cart'
-import { useAuth } from "../Context/Auth";
+import { useCart } from '../../Context/Cart'
+import { useAuth } from "../../Context/Auth";
 
 const ProductDisplay = ({ deletecart, SetLoading, total }) => {
   const[cartItems,setCartItems]=useCart();
