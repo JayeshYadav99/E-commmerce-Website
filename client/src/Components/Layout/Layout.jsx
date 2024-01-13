@@ -3,6 +3,8 @@ import Footer from './Footer'
 import Navbar from './Navbar'
 import { Helmet } from 'react-helmet'
 import { ToastContainer } from 'react-toastify';
+
+import Logo from '../../assets/online-shopping.png'
 export default function Layout({children,title,description,author}) {
   return (
     <div>
@@ -10,6 +12,7 @@ export default function Layout({children,title,description,author}) {
    
   <meta charSet="UTF-8" />
   <meta name="description" content={description}/>
+  <meta itemprop="image" content="../../assets/online-shopping.png"/>
   <meta name="keywords" content="HTML, CSS, JavaScript" />
   <meta name="author" content={author} />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
