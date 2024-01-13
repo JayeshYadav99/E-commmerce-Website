@@ -12,6 +12,10 @@ export default function Layout({children,title,description,author}) {
    
   <meta charSet="UTF-8" />
   <meta name="description" content={description}/>
+  <meta itemprop="name" content="Ecommerce Website"/>
+
+  <meta itemprop="description" content=""/>
+
   <meta itemprop="image" content="../../assets/online-shopping.png"/>
   <meta name="keywords" content="HTML, CSS, JavaScript" />
   <meta name="author" content={author} />
