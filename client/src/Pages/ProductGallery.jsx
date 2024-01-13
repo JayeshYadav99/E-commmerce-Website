@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect,useCallback } from 'react'
 import { useAuth } from '../Context/Auth'
 import axios from "axios";
-import Layout from '../Components/Layout'
+import Layout from '../Components/Layout/Layout'
 import 'react-toastify/dist/ReactToastify.css';
 import {Prices}  from '../Components/Prices';
 import { BarLoader } from 'react-spinners';

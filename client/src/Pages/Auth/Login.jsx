@@ -2,7 +2,7 @@ import React, { useState, useContext } from 'react';
 // import AuthContext from "../../Context/AuthProvider"
 import axios from "axios";
 import { useNavigate,useLocation ,Link} from "react-router-dom"
-import Layout from '../../Components/Layout';
+import Layout from '../../Components/Layout/Layout';
 import {useAuth} from "../../Context/Auth"
 import {toast } from "react-toastify"
 import 'react-toastify/dist/ReactToastify.css';

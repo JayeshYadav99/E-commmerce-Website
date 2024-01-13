@@ -2,7 +2,7 @@ import React from 'react'
 
 import AdminMenu from "../../Components/AdminMenu";
 import { NavLink,Link } from 'react-router-dom'
-import Layout from '../../Components/Layout'
+import Layout from '../../Components/Layout/Layout'
 const Users = () => {
   return (
     <Layout title={"Dashboard - All Users"}>

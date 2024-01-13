@@ -1,13 +1,13 @@
 import React, { useState } from 'react'
 import 'flowbite';
 import { Link,NavLink } from 'react-router-dom';
-import {useAuth} from "../Context/Auth"
+import {useAuth} from "../../Context/Auth"
 import {toast } from "react-toastify"
 import 'react-toastify/dist/ReactToastify.css';
-import Logo from "../assets/online-shopping.png"
-import Profile from "../assets/profile.png"
-import SearchInput from './Forms/SearchInput';
-import { useCart } from '../Context/Cart';
+import Logo from "../../assets/online-shopping.png"
+import Profile from "../../assets/profile.png"
+import SearchInput from '../Forms/SearchInput';
+import { useCart } from '../../Context/Cart';
 export default function Navbar() {
 
 const[cartItems,setCartItems]=useCart();
@@ -105,41 +105,17 @@ const handleLogout=()=>{
               </svg>
               <span className="sr-only">Toggle sidebar</span>
             </button>
-         
-              <img src={ Logo}className="mr-3 h-8" alt="Website Logo" />
+            <img src={ Logo}className="mr-3 h-8" alt="Website Logo" />
+         <Link to="/">
+        
 
-              <span className="self-center text-2xl  mr-4 font-semibold whitespace-nowrap text-white dark:text-white">
-                ShopSage
-              </span>
+<span className="self-center text-2xl  mr-4 font-semibold whitespace-nowrap text-white dark:text-white">
+  ShopSage
+</span>
+         </Link>
+            
      
-            {/* <form action="#" method="GET" className="hidden lg:block lg:pl-2">
-              <label htmlFor="topbar-search" className="sr-only">
-                Search
-              </label>
-              <div className="relative mt-1 lg:w-96">
-                <div className="flex absolute inset-y-0 left-0 items-center pl-3 pointer-events-none">
-                  <svg
-                    className="w-5 h-5 text-gray-500 dark:text-gray-400"
-                    fill="currentColor"
-                    viewBox="0 0 20 20"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <path
-                      fillRule="evenodd"
-                      d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z"
-                      clipRule="evenodd"
-                    />
-                  </svg>
-                </div>
-                <input
-                  type="text"
-                  name="email"
-                  id="topbar-search"
-                  className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full pl-10 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
-                  placeholder="Search"
-                />
-              </div>
-            </form> */}
+ 
           </div>
           <SearchInput/>
           <div className="flex items-center lg:order-2">
@@ -679,42 +655,7 @@ const handleLogout=()=>{
                     Collections
                   </a>
                 </li>
-                <li>
-                  <a
-                    href="#"
-                    className="flex justify-between items-center py-2 px-4 text-sm hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
-                  >
-                    <span className="flex items-center">
-                      <svg
-                        aria-hidden="true"
-                        className="mr-2 w-5 h-5 text-primary-600 dark:text-primary-500"
-                        fill="currentColor"
-                        viewBox="0 0 20 20"
-                        xmlns="http://www.w3.org/2000/svg"
-                      >
-                        <path
-                          fillRule="evenodd"
-                          d="M12.395 2.553a1 1 0 00-1.45-.385c-.345.23-.614.558-.822.88-.214.33-.403.713-.57 1.116-.334.804-.614 1.768-.84 2.734a31.365 31.365 0 00-.613 3.58 2.64 2.64 0 01-.945-1.067c-.328-.68-.398-1.534-.398-2.654A1 1 0 005.05 6.05 6.981 6.981 0 003 11a7 7 0 1011.95-4.95c-.592-.591-.98-.985-1.348-1.467-.363-.476-.724-1.063-1.207-2.03zM12.12 15.12A3 3 0 017 13s.879.5 2.5.5c0-1 .5-4 1.25-4.5.5 1 .786 1.293 1.371 1.879A2.99 2.99 0 0113 13a2.99 2.99 0 01-.879 2.121z"
-                          clipRule="evenodd"
-                        />
-                      </svg>{" "}
-                      Pro version
-                    </span>
-                    <svg
-                      aria-hidden="true"
-                      className="w-5 h-5 text-gray-400"
-                      fill="currentColor"
-                      viewBox="0 0 20 20"
-                      xmlns="http://www.w3.org/2000/svg"
-                    >
-                      <path
-                        fillRule="evenodd"
-                        d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
-                        clipRule="evenodd"
-                      />
-                    </svg>
-                  </a>
-                </li>
+            
               </ul>
               <ul
                 className="py-1 font-light text-gray-500 dark:text-gray-400"

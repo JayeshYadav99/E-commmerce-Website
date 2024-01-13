@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import Layout from '../Components/Layout'
+import Layout from '../Components/Layout/Layout'
 import { useCart } from '../Context/Cart'
 import { useAuth } from '../Context/Auth'
 import { useNavigate, Link, json } from 'react-router-dom'
@@ -14,6 +14,7 @@ const CartPage = () => {
 
 
   const fetchCartDetails = async (userID) => {
+    console.log("user Id", userID)
     try {
       // Make an Axios request to fetch cart details
       const response = await axios.get(`${import.meta.env.VITE_API_URL}/api/v1/cart/${userID}`); // Adjust the API endpoint
@@ -44,9 +45,9 @@ const CartPage = () => {
   useEffect(() => {
     // Fetch cart details when the component mounts and user is available
     if (auth.user) {
-      fetchCartDetails(auth.user._id);
+      fetchCartDetails(auth?.user?._id);
     }
-  }, [auth.user]);
+  }, [auth]);
   const TotalPrice = () => {
     try {
       let total = 0;
@@ -63,7 +64,8 @@ const CartPage = () => {
     try {
       SetLoading(true);
       await axios.put(`${import.meta.env.VITE_API_URL}/api/v1/cart/${auth.user._id}`, { action: 'clearCart' });
-      setCartItems([]); // Clear the cart locally
+      setCartItems([]);
+      localStorage.removeItem("cart") // Clear the cart locally
     } catch (error) {
       console.error('Error clearing cart:', error);
     } finally {
@@ -152,6 +154,11 @@ const CartPage = () => {
       // Handle errors as needed
     }
   };
+
+  useEffect(() => { 
+    
+    fetchCartDetails(auth?.user?._id);
+  }, [ ])
 
   return (
     <Layout title={"Cart"}>

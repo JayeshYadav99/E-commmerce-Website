@@ -9,7 +9,7 @@ const Loader = ({path="login"}) => {
   useEffect(() => {
     const interval = setInterval(() => {
       setCount((prevValue) => --prevValue);
-    }, 500);
+    }, 5000);
     count === 0 &&
       navigate(`/${path}`, {
         state: location.pathname,

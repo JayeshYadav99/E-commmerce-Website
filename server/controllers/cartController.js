@@ -64,6 +64,8 @@ export const UpdateCart = async (req, res) => {
         console.log(cartItem.quantity)
       }
     } else if (req.body.action === 'removeItem') {
+
+
       // Remove a specific item from the cart
       const { productId } = req.body;
       console.log(productId)
@@ -75,6 +77,9 @@ export const UpdateCart = async (req, res) => {
         return !isMatchingProduct; // Return true to keep the item or false to filter it out
       });
       console.log(updatedUserItems)
+      userCart.items = updatedUserItems;
+
+
     } else if (req.body.action === 'updateCart') {
       // Update the entire cart with a new set of items
       userCart.items = req.body.items;
@@ -106,6 +111,7 @@ export const UpdateCart = async (req, res) => {
     // Populate the user details in the updated cart
     const populatedCart = await updatedCart.populate('items.product');
 
+    console.log(populatedCart)
     res.json(populatedCart);
   } catch (error) {
     console.log(error);

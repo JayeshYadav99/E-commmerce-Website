@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 // import AuthContext from "../../Context/AuthProvider"
 import axios from "axios";
 import { useNavigate} from "react-router-dom"
-import Layout from '../../Components/Layout';
+import Layout from '../../Components/Layout/Layout';
 
 const Forgotpassword = () => {
 

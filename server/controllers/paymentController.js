@@ -1,9 +1,7 @@
 import stripe from 'stripe';
-import dotenv from 'dotenv';
 
-const stripeInstance = stripe("sk_test_51OGLoGSCN0lEsRfmmIEcy5EiipCHZNueSgNAzzcEJ3G2O2w3h73AaDif4lFBgEpsm6jL03p0zHn7qQD8RTfkcNas00F6Gm9y0C");
-console.log(process.env.STRIPE_API_SECRET);
 
+ console.log(process.env.STRIPE_API_SECRET)
 // Controller function for processing payments
 export const processPayment = async (req, res) => {
   console.log(req.body.amount);
@@ -43,8 +41,35 @@ export const processPayment = async (req, res) => {
     }
     export const PaymentIntent = async (req, res) => {
       try {
+        
+        const { cart, shippingAddress, user, totalPrice, paymentInfo } = req.body;
+
         // You should calculate the payment amount on the server to prevent
         // tampering. This is just a simple example, so we're hardcoding the amount.
+        const line_items=req.body.cart.items.map((item)=>{
+         return{ price_data: { 
+            currency: 'inr',
+            product_data: {
+              name: item.name,
+              Images:[item.image],
+              description: item.description,
+              metadata:{
+                id:item._id,
+              }
+            },
+            unit_amount: item.price*100,
+          },  
+          quantity: item.quantity,  
+        } 
+      })
+        const customer = await stripeInstance.customers.create({
+          metadata: {
+            userId:req.body.userId,
+            cart: cart.items,
+          },
+          name: 'Jenny Rosen',
+          email: 'jennyrosen@example.com',
+        });
         const paymentIntent = await stripeInstance.paymentIntents.create({
           amount: 1099,
           currency: 'inr',
@@ -58,15 +83,49 @@ export const processPayment = async (req, res) => {
     };
     export const createCheckoutSession = async (req, res) => {
       try {
-        const{total}=req.body;
+        const stripeInstance = stripe(process.env.STRIPE_API_SECRET);
+
+        const{total,items}=req.body;
 
 
         // const product = await stripeInstance.products.create({
         //   name: 'Gold Plan',
         // });
+
+        const line_items=req.body.items.map((item)=>{
+          return{ 
+            price_data: { 
+             currency: 'inr',
+             product_data: {
+               name: item.name,
+               images:[item.photo.url],
+               description: item.description,
+               metadata:{
+                 id:item._id,
+               }
+             },
+             unit_amount: Math.ceil(item.price*100),
+           },  
+           quantity: item.quantity,  
+         } 
+       })
+       console.log("LINE Items",line_items)
+       console.log(items);
+         const customer = await stripeInstance.customers.create({
+           metadata: {
+             userId:req.body.userId,
+          
+           },
+           name: 'Jenny Rosen',
+           email: 'jennyrosen@example.com',
+         });
+         const paymentIntent = await stripeInstance.paymentIntents.create({
+           amount: 1099,
+           currency: 'inr',
+         });
         const price = await stripeInstance.prices.create({
           currency: 'inr',
-          unit_amount:Math.ceil(total*100),
+          unit_amount:Math.round(total*100),
           
           product_data: {
             name: 'Total amount',
@@ -76,16 +135,59 @@ export const processPayment = async (req, res) => {
 
         
         const session = await stripeInstance.checkout.sessions.create({
-          line_items: [
+          shipping_address_collection: {
+            allowed_countries: ['IN', 'CA'],
+          },
+          shipping_options: [
             {
-              
-              price: price.id,
-              quantity: 1,
+              shipping_rate_data: {
+                type: 'fixed_amount',
+                fixed_amount: {
+                  amount: 0,
+                  currency: 'inr',
+                },
+                display_name: 'Free shipping',
+                delivery_estimate: {
+                  minimum: {
+                    unit: 'business_day',
+                    value: 5,
+                  },
+                  maximum: {
+                    unit: 'business_day',
+                    value: 7,
+                  },
+                },
+              },
+            },
+            {
+              shipping_rate_data: {
+                type: 'fixed_amount',
+                fixed_amount: {
+                  amount: 1500,
+                  currency: 'inr',
+                },
+                display_name: 'Next day air',
+                delivery_estimate: {
+                  minimum: {
+                    unit: 'business_day',
+                    value: 1,
+                  },
+                  maximum: {
+                    unit: 'business_day',
+                    value: 1,
+                  },
+                },
+              },
             },
           ],
+          customer : customer.id,
+          line_items,
+          phone_number_collection: {
+            enabled: true,
+          },
           mode: 'payment',
-          success_url: `http://localhost:5173/cart?success=true`,
-          cancel_url: `http://localhost:5173/cart?canceled=true`,
+          success_url: `${process.env.CLIENT_URL}/order-success`,
+          cancel_url: `https://transparentshopping.onrender.com/cart?canceled=true`,
         });
 
 

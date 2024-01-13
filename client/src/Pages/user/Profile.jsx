@@ -1,7 +1,7 @@
 import React, { useState ,useEffect} from 'react';
 import { FiEdit } from 'react-icons/fi';
 import UserMenu from '../../Components/UserMenu';
-import Layout from '../../Components/Layout';
+import Layout from '../../Components/Layout/Layout';
 import { useAuth } from '../../Context/Auth';
 import { Link,useNavigate } from 'react-router-dom';
 import { useLocation } from 'react-router-dom';
@@ -12,15 +12,27 @@ const Profile = () => {
   const navigate=useNavigate();
   const [auth, setAuth] = useAuth();
   const [isEditing, setIsEditing] = useState(false);
-  const [userDetails, setUserDetails] = useState(auth.user);
-const[phone,setPhone]=useState(auth.user.phone);
+  const [userDetails, setUserDetails] = useState();
+const[phone,setPhone]=useState(auth?.user?.phone);
 useEffect(() => {
+
+  console.log("Called");
+  setUserDetails(auth?.user);
+  
+  console.log(location)
+  console.log(userDetails)
+  setPhone(userDetails?.phone);
+}, [auth]);
+
+useEffect(() => {
+
   console.log("Called");
   console.log(location)
   console.log(userDetails)
-  setPhone(userDetails.phone);
+  setPhone(userDetails?.phone);
 }, [userDetails]);
 
+   
 // Check if there's updated user details in the location state
 useEffect(() => {
   console.log("only for phonenumber change")
@@ -74,82 +86,109 @@ useEffect(() => {
   };
 
   return (
-    <Layout title={'Your Profile'}>
-      <div className="flex">
-            <UserMenu />
-          </div>
-          <div className="flex-1 p-12">
-            <h1>Your Profile</h1>
-            <div className="flex items-center mb-4">
-              <h2 className="text-xl font-bold">Personal Information</h2>
-              {!isEditing && (
-                <button
-                  className="ml-2 text-gray-500 hover:text-gray-700"
-                  onClick={handleEdit}
-                >
-                  <FiEdit />
+  
+ 
+      
+    
+    
+
+
+
+          <div className="w-3/4 p-4">
+            <div className="mb-6">
+              <div className="flex justify-between items-center mb-4">
+                <h2 className="text-xl font-semibold">Personal Information</h2>
+                {!isEditing && (
+                <button className="inline-flex items-center justify-center rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-input bg-background hover:bg-accent hover:text-accent-foreground h-10 px-4 py-2"  onClick={handleEdit}>
+                  Edit
                 </button>
-              )}
-            </div>
-            <div className="mb-4">
-              <label className="block mb-2 text-gray-600">Name</label>
+                )}
+              </div>
+              <div className="grid grid-cols-2 gap-4">
               {isEditing ? (
                 <input
-                  type="text"
+                  className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
                   name="name"
-                  value={userDetails.name}
+                  placeholder="First Name"
+                  type="text"
+                  value={userDetails?.name}
                   onChange={handleChange}
-                  className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  defaultValue="Jayesh"
                 />
-              ) : (
-                <p>{userDetails.name}</p>
+
+              ):(
+<p>{userDetails?.name}</p>
               )}
-            </div>
-            <div className="mb-4">
-              <label className="block mb-2 text-gray-600">Email</label>
-              {isEditing ? (
-               <p>{userDetails.email}</p>
-              ) : (
-                <p>{userDetails.email}</p>
-              )}
-            </div>
-            <div className="mb-4">
-              <label className="block mb-2 text-gray-600">Address</label>
-              {isEditing ? (
-                <input
-                  type="address"
-                  name="address"
-                  value={userDetails.address}
-                  onChange={handleChange}
-                  className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                />
-              ) : (
-                <p>{userDetails.address}</p>
-              )}
-            </div>
-            <div className="mb-4">
-              <label className="block mb-2 text-gray-600">Phone Number</label>
-              {isEditing ? (<>
-                <p>{phone}</p>
-                <Link  className="text-red-700" to='/edit-phone' state={ { oldPhone: userDetails.phone } }>
-            Edit Phone Number
-          </Link></>
-                
- ) : (
-  <p>{phone}</p>
-)}
-</div>
-            {isEditing && (
+               {isEditing && (
               <button
-                className="px-4 py-2 text-white bg-blue-500 rounded-md hover:bg-blue-600"
+                className=" w-1/2 px-4 py-2 text-white bg-blue-500 rounded-md hover:bg-blue-600"
                 onClick={handleSave}
               >
                 Save
               </button>
             )}
+              </div>
+
+    
+            </div>
+            <div className="mb-6">
+              <div className="flex justify-between items-center mb-4">
+                <h2 className="text-xl font-semibold">Email Address</h2>
+                {/* <button className="inline-flex items-center justify-center rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-input bg-background hover:bg-accent hover:text-accent-foreground h-10 px-4 py-2">
+                  Edit
+                </button> */}
+              </div>
+              {userDetails?.email}
+              {/* <input
+                className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+                type="email"
+                defaultValue="jayeshedits@gmail.com"
+              /> */}
+            </div>
+            <div className="mb-6">
+              <div className="flex justify-between items-center mb-4">
+                <h2 className="text-xl font-semibold">Mobile Number</h2>
+                <Link  className="inline-flex items-center justify-center rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-input bg-background hover:bg-accent hover:text-accent-foreground h-10 px-4 py-2" to='/edit-phone' state={ { oldPhone: userDetails?.phone } }>
+            Edit 
+          </Link>
+                {/* <button className="inline-flex items-center justify-center rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-input bg-background hover:bg-accent hover:text-accent-foreground h-10 px-4 py-2">
+                  Edit
+                </button> */}
+              </div>
+              {phone &&
+              <input
+                className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+                type="tel"
+                value={phone}
+                defaultValue={+916351854267}
+              />
+}
+            </div>
           </div>
-     
-    </Layout>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+             
+
+
+
+
+
+
+
   );
 };
 

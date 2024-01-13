@@ -1,7 +1,7 @@
 import React ,{useEffect,useState} from 'react'
 import { useParams } from 'react-router-dom'
 import axios from 'axios'
-import Layout from '../Components/Layout'
+import Layout from '../Components/Layout/Layout'
 import { toast } from "react-toastify"
 const Productdetails = () => {
 const params=useParams()

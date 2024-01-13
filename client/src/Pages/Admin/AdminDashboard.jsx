@@ -1,5 +1,5 @@
 import React from 'react'
-import Layout from '../../Components/Layout'
+import Layout from '../../Components/Layout/Layout'
 import { NavLink,Link } from 'react-router-dom'
 import { PaperClipIcon } from '@heroicons/react/20/solid'
 import {useAuth} from '../../Context/Auth'

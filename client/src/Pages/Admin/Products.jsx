@@ -1,7 +1,7 @@
 import React ,{useState,useEffect} from 'react'
 import AdminMenu from "../../Components/AdminMenu";
 import { NavLink,Link,useNavigate } from 'react-router-dom'
-import Layout from '../../Components/Layout'
+import Layout from '../../Components/Layout/Layout'
 import { toast } from "react-toastify"
 import TimeAgo from 'react-timeago';
 import axios from "axios";

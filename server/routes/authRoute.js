@@ -8,7 +8,6 @@ import {
   updatePhoneController, // Add the new controller import
 } from "../controllers/authController.js";
 import { isAdmin, requireSignIn } from "../middlewares/authMiddleware.js";
-
 //router object
 const router = express.Router();
 

@@ -2,7 +2,7 @@
 import './App.css'
 import {Routes,Route} from 'react-router-dom';
 import Test from './Test';
-import Navbar from './Components/Navbar';
+import Navbar from './Components/Layout/Navbar';
 import Homepage from './Pages/Homepage';
 import Signup from './Pages/Auth/Signup'
 import Login from './Pages/Auth/Login'
@@ -31,6 +31,9 @@ import { useEffect,useState } from 'react';
 import Payment from './Pages/Payment';
 import PaymentCheckout from './Pages/PaymentCheckout';
 import axios from 'axios';
+import OrderSuccessPage from './Pages/OrderSuccessPage';
+import UserMenu from './Components/UserMenu';
+import OrderDetailsPage from './Pages/OrderDetailsPage';
 function App() {
 const[stripeapikey,setStripeapikey]=useState('');
 async function getStripeApiKey(){
@@ -49,12 +52,17 @@ useEffect(()=>{
 
 
   <Routes>
+
+
+  //Checking Component Routes
+  <Route path='/UserMenu'element={<UserMenu/>}/>
     <Route path='/Test'element={<Test/>}/>
     <Route path='/Drag'element={<Drag/>}/>
     <Route path='/Test'element={<Test/>}/>
     <Route path='/Search'element={<SearchPage/>}/>
     <Route path='/cart'element={<CartPage/>}/>
     <Route path='/product/:slug'element={<Productdetails/>}/>
+    <Route path="/order-success" element={<OrderSuccessPage/>} />
   <Route path='/edit-phone' element={<PhoneSignUp/>} />
     <Route path='/Grid'element={<ProductGrid/>}/>
     <Route path='/ProductGallery'element={<ProductGallery/>}/>
@@ -66,10 +74,14 @@ useEffect(()=>{
     <Route path='/Form'element={<CategoryForm/>}/>
     <Route path='/forgotpassword'element={<Forgotpassword/>}/>
     <Route path='/Dashboard' element={<PrivateRoutes/>}>
-    <Route path="user" element={<Dashboard/>}/>
+      <Route path="orderDetails/:orderId" element={<OrderDetailsPage/>} />
+    <Route path="user" element={<UserMenu/>}>
 
+
+          <Route path="profile" element={<Profile/>} />
+          </Route>
           <Route path="user/orders" element={<Orders/>} />
-          <Route path="user/profile" element={<Profile/>} />
+
     </Route>
     <Route  path="/Dashboard" element={<AdminRoutes/>}>
     <Route path='admin'element={<AdminDashboard/>}/>
@@ -78,6 +90,7 @@ useEffect(()=>{
     <Route path="admin/create-product" element={<CreateProduct />} />
     <Route path="admin/product/:slug" element={<UpdateProduct />} />
     <Route path="admin/users" element={<Users />} />
+
 
 
     </Route>

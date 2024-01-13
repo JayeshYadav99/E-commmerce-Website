@@ -2,7 +2,7 @@ import React ,{useState}from 'react'
 
 import AdminMenu from "../../AdminMenu";
 import { NavLink,Link } from 'react-router-dom'
-import Layout from '../../../Components/Layout'
+import Layout from '../../Layout/Layout'
 const ProductGrid = ({products}) => {
     
   return (

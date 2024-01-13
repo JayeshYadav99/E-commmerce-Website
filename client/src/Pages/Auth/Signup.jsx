@@ -1,6 +1,6 @@
 import React from 'react';
 import axios from 'axios';
-import Layout from '../../Components/Layout';
+import Layout from '../../Components/Layout/Layout';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import {toast } from "react-toastify"
