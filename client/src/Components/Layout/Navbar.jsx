@@ -248,26 +248,9 @@ const handleLogout=()=>{
               </svg>
             </button>
             {/* Notifications */}
-            <button
-              type="button"
-              onClick={() => toggleDropdown('notificationDropdown')}
-              data-dropdown-toggle="notification-dropdown"
-              className="p-2 mr-1 text-gray-500 rounded-lg hover:text-gray-900 hover:bg-gray-100 dark:text-gray-400 dark:hover:text-white dark:hover:bg-gray-700 focus:ring-4 focus:ring-gray-300 dark:focus:ring-gray-600"
-            >
-              <span className="sr-only">View notifications</span>
-              {/* Bell icon */}
-              <svg
-                aria-hidden="true"
-                className="w-6 h-6"
-                fill="currentColor"
-                viewBox="0 0 20 20"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path d="M10 2a6 6 0 00-6 6v3.586l-.707.707A1 1 0 004 14h12a1 1 0 00.707-1.707L16 11.586V8a6 6 0 00-6-6zM10 18a3 3 0 01-3-3h6a3 3 0 01-3 3z" />
-              </svg>
-            </button>
+        
             {/* Dropdown menu */}
-            <div
+            {/* <div
               className={`  z-50 my-4 max-w-sm text-base list-none bg-black rounded divide-y divide-gray-100 shadow-lg dark:divide-gray-600 dark:bg-gray-700 ${dropdowns.notificationDropdown ? "block" : "hidden"}`}
               id="notification-dropdown"
               style={{ position: "absolute", right: "1rem", top: "3.5rem" }}
@@ -492,7 +475,7 @@ const handleLogout=()=>{
                   View all
                 </div>
               </a>
-            </div>
+            </div> */}
             {/* Apps */}
             <button
               type="button"
@@ -549,10 +532,32 @@ const handleLogout=()=>{
                   <svg aria-hidden="true" className="mx-auto mb-1 w-7 h-7 text-gray-400 group-hover:text-gray-500 dark:text-gray-400 dark:group-hover:text-gray-400" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fillRule="evenodd" d="M5 2a2 2 0 00-2 2v14l3.5-2 3.5 2 3.5-2 3.5 2V4a2 2 0 00-2-2H5zm2.5 3a1.5 1.5 0 100 3 1.5 1.5 0 000-3zm6.207.293a1 1 0 00-1.414 0l-6 6a1 1 0 101.414 1.414l6-6a1 1 0 000-1.414zM12.5 10a1.5 1.5 0 100 3 1.5 1.5 0 000-3z" clipRule="evenodd"></path></svg>
                   <div className="text-sm text-gray-900 dark:text-white">Billing</div>
                 </Link>
-                <Link to="#" className="block p-4 text-center rounded-lg hover:bg-gray-100 dark:hover:bg-gray-600 group">
-                  <svg aria-hidden="true" className="mx-auto mb-1 w-7 h-7 text-gray-400 group-hover:text-gray-500 dark:text-gray-400 dark:group-hover:text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" stroke-width="2" d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1"></path></svg>
-                  <div className="text-sm text-gray-900 dark:text-white">Logout</div>
-                </Link>
+                
+                {!auth.user ? (   <>
+        <li>
+        <NavLink
+          to="/login"
+          activeClassName="text-indigo-500" // Apply active styling here
+          className="block p-4 text-center rounded-lg hover:bg-gray-100 dark:hover:bg-gray-600 group"
+        >
+             <svg aria-hidden="true" className="mx-auto mb-1 w-7 h-7 text-gray-400 group-hover:text-gray-500 dark:text-gray-400 dark:group-hover:text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" stroke-width="2" d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1"></path></svg>
+                <div className="text-sm text-gray-900 dark:text-white">Logout</div>
+          Login
+        </NavLink>
+      </li>
+           
+            </>  ):( <li>
+            <NavLink
+              to="/"
+              activeClassName="text-indigo-500" // Apply active styling here
+              className="block p-4 text-center rounded-lg hover:bg-gray-100 dark:hover:bg-gray-600 group"
+              onClick={handleLogout}
+            >
+                <svg aria-hidden="true" className="mx-auto mb-1 w-7 h-7 text-gray-400 group-hover:text-gray-500 dark:text-gray-400 dark:group-hover:text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" stroke-width="2" d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1"></path></svg>
+                <div className="text-sm text-gray-900 dark:text-white">Logout</div>
+            </NavLink>
+          </li>)}
+                
               </div>
             </div>
             <button
@@ -661,15 +666,36 @@ const handleLogout=()=>{
                 className="py-1 font-light text-gray-500 dark:text-gray-400"
                 aria-labelledby="dropdown"
               >
-                <li>
-                  <Link
-                    to="/"
-                    onClick={handleLogout}
-                    className="block py-2 px-4 text-sm hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
-                  >
-                    Sign out
-                  </Link>
-                </li>
+
+{!auth.user ? (   <>
+        <li>
+        <NavLink
+          to="/login"
+          activeClassName="text-indigo-500" // Apply active styling here
+          className="block py-2 px-4 text-sm hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
+        >
+          Login
+        </NavLink>
+      </li>
+            <li>
+            <NavLink
+              to="/signup"
+              activeClassName="text-indigo-500" // Apply active styling here
+              className="block py-2 px-4 text-sm hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
+            >
+              Register
+            </NavLink>
+          </li></>  ):( <li>
+            <NavLink
+              to="/"
+              activeClassName="text-indigo-500" // Apply active styling here
+              className="block py-2 px-4 text-sm hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
+              onClick={handleLogout}
+            >
+               Sign out
+            </NavLink>
+          </li>)} 
+               
               </ul>
             </div>
           </div>
