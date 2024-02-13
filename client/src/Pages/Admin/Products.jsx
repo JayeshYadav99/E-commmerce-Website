@@ -158,7 +158,7 @@ Setproducts(data.products);
                  </div>
                </td>
                <td className="px-4 py-2">
-                 <span className=" text-black font-bold text-xs  px-2 py-0.5 rounded dark:bg-primary-900 dark:text-primary-300">{product?.price}$ </span>
+                 <span className=" text-black font-bold text-xs  px-2 py-0.5 rounded dark:bg-primary-900 dark:text-primary-300">₹{product?.price} </span>
                </td>
             
                <td className="px-4 py-2 font-medium text-gray-900 whitespace-wrap dark:text-white">

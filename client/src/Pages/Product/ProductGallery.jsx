@@ -9,6 +9,7 @@ import { toast } from "react-toastify"
 import { useNavigate } from 'react-router-dom';
 import { useSearch } from "../../Context/Search";
 import Skeleton from 'react-loading-skeleton';
+import { Link } from 'react-router-dom';
 
 import { useCart } from '../../Context/Cart';
 const ProductGallery = () => {
@@ -640,7 +641,7 @@ Off-canvas filters for mobile, show/hide based on off-canvas filters state.
                                             </div>
                                         </div>}
                                         <button
-                                                        className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+                                                        className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4  mt-4 "
                                                         onClick={()=>window.location.reload()}
                                                     >
                                                         Reset Filters
@@ -691,7 +692,7 @@ Off-canvas filters for mobile, show/hide based on off-canvas filters state.
     
  
      <div className="w-full max-w-sm bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
-  <a href="#">
+  <Link to={`/product/${product?.slug}`}>
 <div
   className="p-8 rounded-t-lg  bg-center h-48"
   style={{
@@ -703,7 +704,7 @@ Off-canvas filters for mobile, show/hide based on off-canvas filters state.
 >
   {/* You can add an overlay or loading spinner here if needed */}
 </div>
-</a>
+</Link>
 <div className="px-5 pb-5">
 <button onClick={()=>navigate(`/product/${product?.slug}`)}>
   <h5 className="text-xl font-semibold tracking-tight text-gray-900 dark:text-white">

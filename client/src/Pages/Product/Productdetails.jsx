@@ -68,60 +68,7 @@ useEffect(()=>{
        >
          {/* You can add an overlay or loading spinner here if needed */}
        </div>
-          <div className="flex-wrap hidden md:flex mt-4  ">
-                   <div className="w-1/2  h-40 p-2 sm:w-1/4 ">
-                   <div
-         className="p-8 rounded-t-lg  border-red-600 border-4   bg-center h-48"
-         style={{
-           backgroundImage: `url(${product.photo.url})`,
-           backgroundSize: 'contain',
-           backgroundRepeat: 'no-repeat'
-         //   backgroundSize: 'contain',
-         }}
-       >
-         {/* You can add an overlay or loading spinner here if needed */}
-       </div>
-                   </div>
-                   <div className="w-1/2  h-48 p-2 sm:w-1/4  border-red-600 border-4">
-                   <div
-         className="p-8 rounded-t-lg  bg-center h-96"
-         style={{
-           backgroundImage: `url(${product.photo.url})`,
-           backgroundSize: 'contain',
-           backgroundRepeat: 'no-repeat'
-         //   backgroundSize: 'contain',
-         }}
-       >
-         {/* You can add an overlay or loading spinner here if needed */}
-       </div>
-                   </div>
-                   <div className="w-1/2  h-40 p-2 sm:w-1/4  border-red-600 border-4 h-48 ">
-                   <div
-         className="p-8 rounded-t-lg  bg-center h-96"
-         style={{
-           backgroundImage: `url(${product.photo.url})`,
-           backgroundSize: 'contain',
-           backgroundRepeat: 'no-repeat'
-         //   backgroundSize: 'contain',
-         }}
-       >
-         {/* You can add an overlay or loading spinner here if needed */}
-       </div>
-                   </div>
-                   <div className="w-1/2  h-40 p-2 sm:w-1/4 ">
-                   <div
-         className="p-8 rounded-t-lg  bg-center h-96"
-         style={{
-           backgroundImage: `url(${product.photo.url})`,
-           backgroundSize: 'contain',
-           backgroundRepeat: 'no-repeat'
-         //   backgroundSize: 'contain',
-         }}
-       >
-         {/* You can add an overlay or loading spinner here if needed */}
-       </div>
-                   </div>
-                 </div> 
+
             </>
   )}
    </div>
