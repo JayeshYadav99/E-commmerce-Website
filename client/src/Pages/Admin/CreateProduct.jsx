@@ -13,10 +13,26 @@ const CreateProduct = () => {
   const [description, Setdescription] = useState('');
   const [category, Setcategory] = useState('');
   const [shipping, Setshipping] = useState('');
-  const [imageFile, setImageFile] = useState(null);
+  const [imageFile, setImageFile] = useState([]);
+  const [specifications, setSpecifications] = useState([{ key: '', value: '' }]);
 
+  const handleSpecificationChange = (index, e) => {
+    const updatedSpecifications = [...specifications];
+    updatedSpecifications[index][e.target.name] = e.target.value;
+    setSpecifications(updatedSpecifications);
+  };
+  const addSpecification = () => {
+    setSpecifications([...specifications, { key: '', value: '' }]);
+  };
+  
+  const removeSpecification = (index) => {
+    const updatedSpecifications = [...specifications];
+    updatedSpecifications.splice(index, 1);
+    setSpecifications(updatedSpecifications);
+  };
+  
 const handleFileChange = (file) => {
-  setImageFile(file);
+  setImageFile(Array.from(file));
 };
   const getAllCategory = async () => {
     try {
@@ -44,7 +60,12 @@ const handleOnSubmit=async(e)=>{
     formData.append('description', description);
     formData.append('category', category);
     formData.append('shipping', shipping);
-    formData.append('photo', imageFile);
+    console.log(imageFile)
+    imageFile.forEach((file) => {
+      formData.append('photo', file);
+    });
+    formData.append('specifications', JSON.stringify(specifications));
+
     const response=await axios.post(`${import.meta.env.VITE_API_URL}/api/v1/product/create-product-cloud`,formData, {
       headers: {
         'Content-Type': 'multipart/form-data', // Set the content type for file upload
@@ -93,6 +114,36 @@ const handleOnSubmit=async(e)=>{
                 onChange={(e)=>Setname(e.target.value)}
                 className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" placeholder="Type product name" required />
               </div>
+              <div>
+  <h4>Specifications</h4>
+  {specifications.map((specification, index) => (
+    <div key={index} className="grid grid-cols-3 gap-4 mb-2">
+      <input
+        type="text"
+        name="key"
+        value={specification.key}
+        onChange={(e) => handleSpecificationChange(index, e)}
+        placeholder="Key"
+        required
+      />
+      <input
+        type="text"
+        name="value"
+        value={specification.value}
+        onChange={(e) => handleSpecificationChange(index, e)}
+        placeholder="Value"
+        required
+      />
+      <button type="button" onClick={() => removeSpecification(index)}>
+        Remove
+      </button>
+    </div>
+  ))}
+  <button type="button" onClick={addSpecification}>
+    Add Specification
+  </button>
+</div>
+
               <div>
                 <label htmlFor="quantity" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Quantity</label>
                 <input type="number" name="quantity" id="quantity"
@@ -151,9 +202,10 @@ const handleOnSubmit=async(e)=>{
                     <input
         id="dropzone-file"
         type="file"
+        multiple
         className="unhidden"
         accept="image/*"
-        onChange={(e) => handleFileChange(e.target.files[0])}
+        onChange={(e) => handleFileChange(e.target.files)}
       />
                   </label>
                 </div>

@@ -45,7 +45,7 @@ const ProductDisplay = ({ deletecart, SetLoading, total }) => {
           type="submit"
           className="bg-indigo-500 font-semibold hover:bg-indigo-600 py-3 text-sm text-white uppercase w-full"
         >
-          Checkout
+          Proceed to  Checkout
         </button>
       </form>
     </section>

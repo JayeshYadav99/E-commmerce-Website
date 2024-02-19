@@ -33,6 +33,7 @@ import axios from 'axios';
 import OrderSuccessPage from './Pages/Cart/OrderSuccessPage';
 import UserMenu from './Components/Menu/UserMenu';
 import OrderDetailsPage from './Pages/Cart/OrderDetailsPage';
+import Budget from './Pages/Personalized/Budget';
 function App() {
 const[stripeapikey,setStripeapikey]=useState('');
 async function getStripeApiKey(){
@@ -65,7 +66,7 @@ useEffect(()=>{
   <Route path='/edit-phone' element={<PhoneSignUp/>} />
     <Route path='/Grid'element={<ProductGrid/>}/>
     <Route path='/ProductGallery'element={<ProductGallery/>}/>
-
+    <Route path='/Budget'element={<Budget/>}/>
     <Route path='/PaymentCheckout'element={<PaymentCheckout/>}/>
     <Route path='/'element={<Homepage/>}/>
     <Route path='/Signup'element={<Signup/>}/>

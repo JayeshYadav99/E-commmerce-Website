@@ -140,7 +140,7 @@ Setproducts(data.products);
                </td>
                <th scope="row" className="flex items-center px-4 py-2  mt-2 font-medium text-gray-900 whitespace-nowrap dark:text-white">
                <img
-  src={product?.photo?.url}
+  src={product?.photo[0]?.url}
   alt="product"
   className="w-auto h-12 mr-3 mb-4"
 />

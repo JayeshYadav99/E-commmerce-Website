@@ -2,7 +2,7 @@ import React from 'react'
 
 import Imageslider from '../../Components/Utility/Imageslider'
 import { useAuth } from '../../Context/Auth'
-import HeroImage from "../../../public/7932291.gif"
+import HeroImage from "../../assets/7932291.gif"
 import Layout from '../../Components/Layout/Layout'
 export default function Homepage() {
   const[auth,SetAuth]=useAuth();

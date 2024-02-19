@@ -3,11 +3,13 @@ import axios from 'axios';
 import Layout from '../../Components/Layout/Layout';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
+import { useNavigate } from 'react-router-dom';
 import {toast } from "react-toastify"
 import 'react-toastify/dist/ReactToastify.css';
 
 function RegistrationForm() {
   // Define your initial form values
+  const Navigate = useNavigate();
   const initialValues = {
     name: '',
     email: '',
@@ -45,10 +47,12 @@ function RegistrationForm() {
           if(response.data.success)
           {
             toast.success("Regsitered Successfully");
+            Navigate('/');
           }
           else
           {
             toast.info("Already Registered Please login");
+            Navigate('/login');
 
           }
           // Handle successful registration here

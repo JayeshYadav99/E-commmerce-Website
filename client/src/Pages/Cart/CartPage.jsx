@@ -5,6 +5,7 @@ import { useAuth } from '../../Context/Auth'
 import { useNavigate, Link, json } from 'react-router-dom'
 import axios from 'axios'
 import PaymentCheckout from './PaymentCheckout'
+import { toast } from "react-toastify"
 const CartPage = () => {
   const [auth, setAuth] = useAuth();
   const [cartItems, setCartItems] = useCart();
@@ -35,6 +36,8 @@ const CartPage = () => {
       console.log(response.data);
       // Update the cart items in the context
       setCartItems(products);
+      
+   
       // setCartItems(response.data[0].quantity);
       // setCartProducts(products);
     } catch (error) {
@@ -49,9 +52,15 @@ const CartPage = () => {
     }
   }, [auth]);
   const TotalPrice = () => {
+    console.log("Called after fetch")
     try {
       let total = 0;
       cartItems?.map((item) => total += item.price)
+      console.log(total, auth?.budget)
+      if(total>auth?.budget)
+      {
+        console.log("Budget Exceeded Bhai ruk ja");
+      }
       return total;
     } catch (error) {
       console.log(error);
@@ -111,7 +120,9 @@ const CartPage = () => {
       var newQuantity;
 
       if (action === '+') {
+
         console.log(product.quantity, "+");
+        // TotalPrice()
         newQuantity = product.quantity + 1;
         console.log(newQuantity);
       } else if (action === '-' && product.quantity > 0) {
@@ -133,7 +144,14 @@ const CartPage = () => {
           `Successfully updated quantity of product ${product._id} to ${newQuantity}`
         )
         console.log(response.data)
-        const products = response.data.items.map((cartItem) => {
+        const{total}=response.data;
+        console.log(total,auth)
+        if(total>auth?.budget)
+        {
+        alert("Budget Exceeded Bhai ruk ja");
+        toast.error("You have exceeded your budget");
+        }
+        const products = response.data.populatedCart.items.map((cartItem) => {
           console.log(cartItem.quantity)
           return {
             _id: cartItem._id,
@@ -146,6 +164,7 @@ const CartPage = () => {
           };
         });
         setCartItems(products)
+        // TotalPrice();
         // Update the quantity in your frontend state or component
         // For example, you might have a function to update the state like setProducts(updatedProducts);
       }
@@ -158,7 +177,7 @@ const CartPage = () => {
   useEffect(() => { 
     
     fetchCartDetails(auth?.user?._id);
-  }, [ ])
+  }, [auth ])
 
   return (
     <Layout title={"Cart"}>
@@ -201,8 +220,9 @@ const CartPage = () => {
                       <path d="M416 208H272V64c0-17.67-14.33-32-32-32h-32c-17.67 0-32 14.33-32 32v144H32c-17.67 0-32 14.33-32 32v32c0 17.67 14.33 32 32 32h144v144c0 17.67 14.33 32 32 32h32c17.67 0 32-14.33 32-32V304h144c17.67 0 32-14.33 32-32v-32c0-17.67-14.33-32-32-32z" />
                     </svg>
                   </div>
-                  <span className="text-center w-1/5 font-semibold text-sm">₹{product?.price}</span>
-                  <span className="text-center w-1/5 font-semibold text-sm">₹{product?.price}</span>
+                  <span className="text-center w-1/5 font-semibold text-sm">₹{product?.price?.toFixed(2)}</span>
+
+                  <span className="text-center w-1/5 font-semibold text-sm">₹{product?.price?.toFixed(2)}</span>
 
                 </div >
         </>

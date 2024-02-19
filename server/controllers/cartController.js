@@ -29,6 +29,12 @@ export const getCart = async (req, res) => {
     console.log(error)
     res.status(500).json({ error: 'Internal Server Error' });
   }
+};const calculateTotalCost = (cart) => {
+  return cart.items.reduce((total, currentItem) => {
+    const pricePerItem = currentItem.product.price; // Assuming price is accessible like this
+    const quantity = currentItem.quantity;
+    return total + (pricePerItem * quantity);
+  }, 0);
 };
 export const UpdateCart = async (req, res) => {
   try {
@@ -110,9 +116,12 @@ export const UpdateCart = async (req, res) => {
 
     // Populate the user details in the updated cart
     const populatedCart = await updatedCart.populate('items.product');
-
+    const totalCost = calculateTotalCost(populatedCart);
     console.log(populatedCart)
-    res.json(populatedCart);
+    res.json({
+       populatedCart,
+      total: totalCost
+    });
   } catch (error) {
     console.log(error);
     res.status(500).json({ error: 'Internal Server Error' });

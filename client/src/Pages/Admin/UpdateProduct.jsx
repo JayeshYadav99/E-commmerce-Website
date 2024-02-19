@@ -16,8 +16,9 @@ const UpdateProduct = () => {
   const [description, Setdescription] = useState('');
   const [category, Setcategory] = useState('');
   const [shipping, Setshipping] = useState('');
-  const [imageFile, setImageFile] = useState(null);
+  const [imageFile, setImageFile] = useState([]);
   const [showModal, setShowModal] = useState(false);
+  const[specifications,SetSpecifications]=useState([]);
 
 
 
@@ -54,12 +55,25 @@ const UpdateProduct = () => {
   };
 
 
+  const handleSpecificationChange = (index, e) => {
+    const updatedSpecifications = [...specifications];
+    updatedSpecifications[index][e.target.name] = e.target.value;
+    SetSpecifications(updatedSpecifications);
+  };
+  const addSpecification = () => {
+    SetSpecifications([...specifications, { key: '', value: '' }]);
+  };
+  
+  const removeSpecification = (index) => {
+    const updatedSpecifications = [...specifications];
+    updatedSpecifications.splice(index, 1);
+    SetSpecifications(updatedSpecifications);
+  };
 
 
-
-const handleFileChange = (file) => {
-  setImageFile(file);
-};
+  const handleFileChange = (file) => {
+    setImageFile(Array.from(file));
+  };
 
 
 const getSingleProduct=async()=>{
@@ -79,6 +93,7 @@ const getSingleProduct=async()=>{
   Setcategory(product.category._id);
   console.log(product.shipping);
   Setshipping(product.shipping);
+  SetSpecifications(product.specifications);
 //   setImageFile(null);
 
 
@@ -124,7 +139,11 @@ const handleOnSubmit=async(e)=>{
     formData.append('description', description);
     formData.append('category', category);
     formData.append('shipping', shipping);
-    imageFile && formData.append('photo', imageFile);
+
+    formData.append('specifications', JSON.stringify(specifications));
+    imageFile && imageFile.forEach((file) => {
+      formData.append('photo', file);
+    });
     const response=await axios.put(`${import.meta.env.VITE_API_URL}/api/v1/product/update-product/${Product._id}`,formData, {
       headers: {
         'Content-Type': 'multipart/form-data', // Set the content type for file upload
@@ -181,6 +200,35 @@ navigate('/Dashboard/admin/product');
                 className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" placeholder="Type product name" required />
               </div>
               <div>
+  <h4>Specifications</h4>
+  {specifications.map((specification, index) => (
+    <div key={index} className="grid grid-cols-3 gap-4 mb-2">
+      <input
+        type="text"
+        name="key"
+        value={specification.key}
+        onChange={(e) => handleSpecificationChange(index, e)}
+        placeholder="Key"
+        required
+      />
+      <input
+        type="text"
+        name="value"
+        value={specification.value}
+        onChange={(e) => handleSpecificationChange(index, e)}
+        placeholder="Value"
+        required
+      />
+      <button type="button" onClick={() => removeSpecification(index)}>
+        Remove
+      </button>
+    </div>
+  ))}
+  <button type="button" onClick={addSpecification}>
+    Add Specification
+  </button>
+</div>
+              <div>
                 <label htmlFor="quantity" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Quantity</label>
                 <input type="number" name="quantity" id="quantity"
                        value={quantity}
@@ -230,25 +278,32 @@ navigate('/Dashboard/admin/product');
                 <label htmlFor="cover-photo" className="block text-sm font-medium leading-6 text-gray-900">Cover photo</label>
                 <div class="flex items-center justify-center w-full">
                 <div className="mb-3">
-                {imageFile ? (
-                  <div className="text-center">
-                    <img
-                      src={URL.createObjectURL(imageFile)}
-                      alt="product_photo"
-                      height={"200px"}
-                      className="img img-responsive"
-                    />
-                  </div>
-                ) : (
-                  <div className="text-center">
-                    <img
-                      src={Product?.photo?.url}
-                      alt="product_photo"
-                      height={"200px"}
-                      className="img img-responsive"
-                    />
-                  </div>
-                )}
+                {imageFile.length > 0 ? (
+  <div className="text-center">
+    {imageFile.map((file, index) => (
+      <img
+        key={index}
+        src={URL.createObjectURL(file)}
+        alt={`product_photo_${index}`}
+        height={"200px"}
+        className="img img-responsive"
+      />
+    ))}
+  </div>
+) : (
+  <div className="text-center">
+    {Product?.photo?.map((photo, index) => (
+      <img
+        key={index}
+        src={photo.url}
+        alt={`product_photo_${index}`}
+        height={"200px"}
+        className="img img-responsive"
+      />
+    ))}
+  </div>
+)}
+
               </div>
                   <label for="dropzone-file" class="flex flex-col items-center justify-center w-full h-64 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 dark:hover:bg-bray-800 dark:bg-gray-700 hover:bg-gray-100 dark:border-gray-600 dark:hover:border-gray-500 dark:hover:bg-gray-600">
                     <div class="flex flex-col items-center justify-center pt-5 pb-6">
@@ -263,9 +318,10 @@ navigate('/Dashboard/admin/product');
                     <input
         id="dropzone-file"
         type="file"
+        multiple
         className="unhidden"
         accept="image/*"
-        onChange={(e) => handleFileChange(e.target.files[0])}
+        onChange={(e) => handleFileChange(e.target.files)}
       />
                   </label>
                 </div>

@@ -166,9 +166,15 @@ const observer = useRef()
         try {
             const {data}=await axios.put( `${import.meta.env.VITE_API_URL}/api/v1/cart/${auth.user._id}`, { productId: product._id, quantity: 1, action: 'addItem' } );
             console.log(data);
-            SetcartItems((prevCartItems) => [...data.items]);
+            SetcartItems((prevCartItems) => [...data.populatedCart
+.                items]);
+if(data.total>auth?.budget)
+{
+    toast.error("You have exceeded your budget");
+    return;
+}
             toast.success("Product added to cart");
-            localStorage.setItem("cart", JSON.stringify(data.items));
+            localStorage.setItem("cart", JSON.stringify(data.populatedCart.items));
             
         } catch (error) {
             console.log(error);
@@ -693,10 +699,11 @@ Off-canvas filters for mobile, show/hide based on off-canvas filters state.
  
      <div className="w-full max-w-sm bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
   <Link to={`/product/${product?.slug}`}>
+    {product && product?.photo &&
 <div
   className="p-8 rounded-t-lg  bg-center h-48"
   style={{
-    backgroundImage: `url(${product.photo.url})`,
+    backgroundImage: `url(${product?.photo[0]?.url} )`,
     backgroundSize: 'contain',
     backgroundRepeat: 'no-repeat'
   //   backgroundSize: 'contain',
@@ -704,6 +711,7 @@ Off-canvas filters for mobile, show/hide based on off-canvas filters state.
 >
   {/* You can add an overlay or loading spinner here if needed */}
 </div>
+}
 </Link>
 <div className="px-5 pb-5">
 <button onClick={()=>navigate(`/product/${product?.slug}`)}>
@@ -716,7 +724,7 @@ Off-canvas filters for mobile, show/hide based on off-canvas filters state.
 </div>
 <div className="flex items-center justify-between">
   <span className="text-3xl font-bold text-gray-900 dark:text-white">
-    {product?.price}$
+    {product?.price}₹
   </span>
 <button
     onClick={() => {

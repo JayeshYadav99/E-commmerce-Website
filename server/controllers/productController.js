@@ -49,59 +49,83 @@ export const createProductController = async (req, res) => {
 };
 export const createProductControllercloud = async (req, res) => {
   try {
-    // console.log(req)
-    console.log("final")
-       const { name, description, price, category, quantity, shipping } =
-      req.fields;
+    console.log("final");
+    const { name, description, price, category, quantity, shipping, specifications } = req.fields;
 
-    const { photo } = req.files;
-    console.log(req.files);
-    //alidation
+    const photos = req.files.photo; // This could be an array of files
+   
+
+    // Validation
     switch (true) {
       case !name:
-        return res.status(500).send({ error: "Name is Required" });
+        return res.status(400).send({ error: "Name is Required" });
       case !description:
-        return res.status(500).send({ error: "Description is Required" });
+        return res.status(400).send({ error: "Description is Required" });
       case !price:
-        return res.status(500).send({ error: "Price is Required" });
+        return res.status(400).send({ error: "Price is Required" });
       case !category:
-        return res.status(500).send({ error: "Category is Required" });
+        return res.status(400).send({ error: "Category is Required" });
       case !quantity:
-        return res.status(500).send({ error: "Quantity is Required" });
-      case !photo || photo.size > 1000000:
-        return res
-          .status(500)
-          .send({ error: "photo is Required and should be less then 1mb" });
+        return res.status(400).send({ error: "Quantity is Required" });
+      case !photos || photos.length === 0:
+        return res.status(400).send({ error: "At least one photo is required" });
     }
 
-      console.log("image");
-      const image= await  cloudinary.uploader
-      .upload(photo.path);
-    const products = new productModel({ ...req.fields, photo:{
-      url: image.secure_url,
-          public_id: image.public_id,
-        
-    },slug: slugify(name) });
-    await products.save();
- 
-  
+    // Handle multiple photo uploads
+    let uploadedPhotos = [];
+    console.log(photos, "photos")
+    if (Array.isArray(photos)) {
+      console.log("Called");
+      // Multiple files
+      for (let photo of photos) {
+        if (photo.size > 1000000) {
+          return res.status(400).send({ error: "Each photo should be less than 1MB" });
+        }
+        const result = await cloudinary.uploader.upload(photo.path);
+        uploadedPhotos.push({
+          url: result.secure_url,
+          public_id: result.public_id
+        });
+      }
+    } else {
+   ;
+      // Single file (fallback)
+      if (photos.size > 1000000) {
+        return res.status(400).send({ error: "Photo should be less than 1MB" });
+      }
+      const result = await cloudinary.uploader.upload(photos.path);
+      console.log(result)
+      uploadedPhotos.push({
+        url: result.secure_url,
+        public_id: result.public_id
+      });
+    }
 
-    console.log("kaha",products);
-    
+    const product = new productModel({
+      ...req.fields,
+      photo: uploadedPhotos, // Assuming your model can handle an array of photos
+      slug: slugify(name),
+      specifications: JSON.parse(specifications)
+    });
+    await product.save();
+
+    console.log("Product created", product);
+
     res.status(201).send({
       success: true,
       message: "Product Created Successfully",
-      products,
+      product,
     });
   } catch (error) {
     console.log(error);
     res.status(500).send({
       success: false,
       error,
-      message: "Error in crearing product",
+      message: "Error in creating product",
     });
   }
 };
+
 
 //get all products
 export const getProductController = async (req, res) => {
@@ -187,9 +211,9 @@ export const deleteProductController = async (req, res) => {
 //upate producta
 export const updateProductController = async (req, res) => {
   try {
-    const { name, description, price, category, quantity, shipping } =
+    const { name, description, price, category, quantity, shipping,specifications } =
       req.fields;
-    const { photo } = req.files;
+      const photos = req.files.photo; 
     //alidation
 
     console.log(category);
@@ -204,10 +228,8 @@ export const updateProductController = async (req, res) => {
         return res.status(500).send({ error: "Category is Required" });
       case !quantity:
         return res.status(500).send({ error: "Quantity is Required" });
-      case photo && photo.size > 1000000:
-        return res
-          .status(500)
-          .send({ error: "photo is Required and should be less then 1mb" });
+        case !photos || photos.length === 0:
+          return res.status(400).send({ error: "At least one photo is required" });
     }
 
     // const products = await productModel.findByIdAndUpdate(
@@ -224,19 +246,45 @@ export const updateProductController = async (req, res) => {
 
     let updatedProduct;
 
-    if (photo) {
+    if (photos) {
       // If a new photo is provided, upload it to Cloudinary and update the photo field
-      const image = await cloudinary.uploader.upload(photo.path);
+      let uploadedPhotos = [];
+      console.log(photos, "photos")
+      if (Array.isArray(photos)) {
+        console.log("Called");
+        // Multiple files
+        for (let photo of photos) {
+          const pLimit = require('p-limit');
+          if (photo.size > 1000000) {
+            return res.status(400).send({ error: "Each photo should be less than 1MB" });
+          }
+          const result = await cloudinary.uploader.upload(photo.path);
+          uploadedPhotos.push({
+            url: result.secure_url,
+            public_id: result.public_id
+          });
+        }
+      } else {
+     ;
+        // Single file (fallback)
+        if (photos.size > 1000000) {
+          return res.status(400).send({ error: "Photo should be less than 1MB" });
+        }
+        const result = await cloudinary.uploader.upload(photos.path);
+        console.log(result)
+        uploadedPhotos.push({
+          url: result.secure_url,
+          public_id: result.public_id
+        });
+      }
+  
 
       updatedProduct = await productModel.findByIdAndUpdate(
         req.params.pid,
         {
           ...req.fields,
-          photo: {
-            url: image.secure_url,
-            public_id: image.public_id,
-          },
-          slug: slugify(name),
+          photo:uploadedPhotos,
+          slug: slugify(name),specifications:JSON.parse(specifications)
         },
         { new: true }
       );
@@ -244,7 +292,7 @@ export const updateProductController = async (req, res) => {
       // If no new photo is provided, update only the non-photo fields
       updatedProduct = await productModel.findByIdAndUpdate(
         req.params.pid,
-        { ...req.fields, slug: slugify(name) },
+        { ...req.fields, slug: slugify(name),specifications:JSON.parse(specifications) },
         { new: true }
       );
     }

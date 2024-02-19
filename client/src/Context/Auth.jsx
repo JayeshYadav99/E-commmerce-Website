@@ -5,7 +5,8 @@ const AuthContext=createContext();
 const AuthProvider=({children})=>{
     const[auth,SetAuth]=useState({
         user:null,
-        token:''
+        token:'',
+        budget:0
     })
 
     const data = localStorage.getItem("auth");
@@ -19,6 +20,7 @@ axios.defaults.headers.common['Authorization']=auth?.token;
           ...auth,
           user: parseData.user,
           token: parseData.token,
+          budget: parseData.budget,
         });
       }
     }, [data])
