@@ -254,7 +254,7 @@ export const updateProductController = async (req, res) => {
         console.log("Called");
         // Multiple files
         for (let photo of photos) {
-          const pLimit = require('p-limit');
+      
           if (photo.size > 1000000) {
             return res.status(400).send({ error: "Each photo should be less than 1MB" });
           }
