@@ -13,9 +13,12 @@ Welcome to the Transparent Ecommerce Website, an innovative platform designed wi
 
 - **Cart and Order History Functionalities:** Keep track of your current selections with our user-friendly cart system and revisit your past purchases anytime with a comprehensive order history feature, making repurchases or order checks a breeze.
 
+  
+- **Budget Setter:** A groundbreaking feature designed to empower your shopping experience. Set a budget for your grocery shopping, and our system will help you stay within your financial boundaries without compromising on quality or necessity. This proactive approach ensures that you're always in control of your spending.
+
 ### New and Upcoming Features
 
-- **Budget Setter:** A groundbreaking feature designed to empower your shopping experience. Set a budget for your grocery shopping, and our system will help you stay within your financial boundaries without compromising on quality or necessity. This proactive approach ensures that you're always in control of your spending.
+
 
 ## Health-Conscious Suggestions
 
