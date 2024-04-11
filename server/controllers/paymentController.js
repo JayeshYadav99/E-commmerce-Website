@@ -98,7 +98,7 @@ export const processPayment = async (req, res) => {
              currency: 'inr',
              product_data: {
                name: item.name,
-               images:[item.photo.url],
+               images:[item.photo[0].url],
                description: item.description,
                metadata:{
                  id:item._id,

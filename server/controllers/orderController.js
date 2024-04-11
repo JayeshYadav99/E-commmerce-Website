@@ -24,7 +24,7 @@ console.log("LineItems->OrderItems",lineItems);
               customerId:data.customer,
 
             },
-            totalPrice:data.amount_total,
+            totalPrice:data.amount_total/100,
             shippingAddress:data.customer_details
             // cart: cart.items,
             // shippingAddress,
