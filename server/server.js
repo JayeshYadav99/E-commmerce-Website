@@ -31,7 +31,7 @@ const app = express();
 
 //middelwares
 // 
-const endpointSecret = "whsec_01c73c8182cbadc43da8cd31a8be5083b31dd62c2595c72c2a8ae5a9c5d2d22b";
+const endpointSecret = "whsec_e99vOuzLSRH7cHgdbA2ePHXt8VF9jTZa";
 
 // app.use(app.use(bodyParser.raw({type: "*/*"})) )
 

@@ -4,7 +4,8 @@ import { createOrder } from '../controllers/orderController.js';
 import { processPayment, sendStripeApiKey ,PaymentCheckout, PaymentIntent, createCheckoutSession} from '../controllers/paymentController.js';
 const router = express.Router();
 const stripeInstance = stripe("sk_test_51OGLoGSCN0lEsRfmmIEcy5EiipCHZNueSgNAzzcEJ3G2O2w3h73AaDif4lFBgEpsm6jL03p0zHn7qQD8RTfkcNas00F6Gm9y0C");
-const endpointSecret = "whsec_01c73c8182cbadc43da8cd31a8be5083b31dd62c2595c72c2a8ae5a9c5d2d22b";
+// const endpointSecret = "whsec_01c73c8182cbadc43da8cd31a8be5083b31dd62c2595c72c2a8ae5a9c5d2d22b"; THis is local secret
+const endpointSecret = "whsec_e99vOuzLSRH7cHgdbA2ePHXt8VF9jTZa"
 router.post('/payment', processPayment);
 router.post('/', PaymentCheckout);
 router.post('/create-checkout-session', createCheckoutSession);
