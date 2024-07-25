@@ -8,15 +8,15 @@ const AdminRoutes = () => {
     const[auth,SetAuth]=useAuth();
 
     useEffect(() => {
-      
+      console.log(auth)
       const check=async()=>{
-        const response =await axios(`${import.meta.env.VITE_API_URL}/api/v1/auth/admin-auth`,{
-            headers:{
-                "Authorization":`${auth.token}`
-            }
-        });
+        // const response =await axios(`${import.meta.env.VITE_API_URL}/api/v1/auth/admin-auth`,{
+        //     headers:{
+        //         "Authorization":`${auth.token}`
+        //     }
+        // });
 
-        if(response.data.status === "ok"){
+        if(auth?.user.role){
             SetisAuthenticated(true);
         }
         else{
@@ -28,7 +28,7 @@ const AdminRoutes = () => {
       if(auth?.token) check();
     }, [auth?.token])
     
-  return  isAuthenticated ?  <Outlet/> :<Loader path=""/>
+  return  isAuthenticated ?  <Outlet/> :<Loader />
 }
 
 export default AdminRoutes;

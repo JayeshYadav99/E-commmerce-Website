@@ -127,7 +127,7 @@ const getSingleProduct=async()=>{
 
   
 const handleOnSubmit=async(e)=>{
-    alert("magar kyu");
+   
   e.preventDefault();
   try {
 
@@ -149,7 +149,7 @@ const handleOnSubmit=async(e)=>{
         'Content-Type': 'multipart/form-data', // Set the content type for file upload
       }});
       if (response.data.success) {
-        alert("sahi me");
+      
         toast.success("Product Updated successfully");
 navigate('/Dashboard/admin/product');
         getSingleProduct();

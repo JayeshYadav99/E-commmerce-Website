@@ -387,6 +387,25 @@ export const SearchProductController = async (req, res) => {
   }
 };
 
+export const getAllProductsController = async (req, res) => { 
+  try {
+    const products = await productModel.find({}).populate('category').sort({ createdAt: -1, _id: -1 });
+    res.status(200).send({
+      success: true,
+      products,
+      message: "All Products fetched successfully",
+    });
+    
+  } catch (error) {
+    console.log(error);
+    res.status(500).send({
+      success: false,
+      message: "Error while fetching all products",
+      error,
+    });
+    
+  }
+}
 // export const ProductListController = async (req, res) => {
 //   try {
 //     const perPage=6;

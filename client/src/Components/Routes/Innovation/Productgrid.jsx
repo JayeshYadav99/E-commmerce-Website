@@ -1,8 +1,5 @@
 import React ,{useState}from 'react'
-
-import AdminMenu from "../../Menu/AdminMenu";
-import { NavLink,Link } from 'react-router-dom'
-import Layout from '../../Layout/Layout'
+import { truncateText } from  '../../Utility/helpers'
 const ProductGrid = ({products}) => {
     
   return (
@@ -23,7 +20,17 @@ const ProductGrid = ({products}) => {
   </div>
      
      <a href={`/Dashboard/admin/product/${product.slug}`}>
-       <img class="p-8 w-72 h-72 rounded-t-lg" src={product?.photo[0]?.url} alt="product image" />
+     <div
+                              className="p-8 rounded-t-lg  bg-center h-48"
+                              style={{
+                                backgroundImage: `url(${product?.photo[0]?.url} )`,
+                                backgroundSize: "contain",
+                                backgroundRepeat: "no-repeat",
+                                //   backgroundSize: 'contain',
+                              }}
+                            >
+                              {/* You can add an overlay or loading spinner here if needed */}
+                            </div>
      </a>
 
      <div class="px-5 pb-5 mb-4">
@@ -31,7 +38,7 @@ const ProductGrid = ({products}) => {
          <h5 class="text-xl font-semibold tracking-tight text-gray-900 dark:text-white">{product.name}</h5>
        </a>
        <div class="flex items-center mt-2.5 mb-5">
-<span class="bg-blue-100 text-blue-800 text-xs font-bold mr-2 py-0.5 rounded dark:bg-blue-200 dark-text-blue-800 whitespace-wrap max-w-xs">{product.description}</span>
+<span class="bg-blue-100 text-blue-800 text-xs font-bold mr-2 py-0.5 rounded dark:bg-blue-200 dark-text-blue-800 whitespace-wrap max-w-xs">{truncateText(product?.description,25)}</span>
 
 
 
