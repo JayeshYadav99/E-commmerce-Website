@@ -1,57 +1,83 @@
-import React ,{useEffect,useState} from 'react'
-import { useParams } from 'react-router-dom'
-import { Link } from 'react-router-dom'
-import axios from 'axios'
-import Layout from '../../Components/Layout/Layout'
-import { toast } from "react-toastify"
-import Placeholder from "../../assets/placeholder.png"
+import React, { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
+import { Link } from "react-router-dom";
+import axios from "axios";
+import Layout from "../../Components/Layout/Layout";
+import { toast } from "react-toastify";
+import { useAuth } from "../../Context/Auth";
+import Placeholder from "../../assets/placeholder.png";
 const Productdetails = () => {
-const params=useParams()
+  const params = useParams();
 
-const[product,Setproduct]=useState({})
-const[similarproducts,Setsimilarproducts]=useState([])
-const [mainImage, setMainImage] = useState(product?.photo?.[0]?.url || Placeholder);
-const getProduct=async()=>{
+  const [product, Setproduct] = useState({});
+  const [similarproducts, Setsimilarproducts] = useState([]);
+  const [auth, SetAuth] = useAuth();
+  const [mainImage, setMainImage] = useState(
+    product?.photo?.[0]?.url || Placeholder
+  );
+  
+  const handleAddToCart = async (product) => {
+    if (!auth) return navigate("/login");
+
     try {
-        const{data}=await axios.get(`${import.meta.env.VITE_API_URL}/api/v1/product/get-product/${params.slug}`)
-    if(data.success){
+      const { data } = await axios.put(
+        `${import.meta.env.VITE_API_URL}/api/v1/cart/${auth.user._id}`,
+        { productId: product._id, quantity: 1, action: "addItem" }
+      );
+      console.log(data);
+      SetcartItems((prevCartItems) => [...data.populatedCart.items]);
+      if (data.total > auth?.budget) {
+        toast.error("You have exceeded your budget");
+        return;
+      }
+      toast.success("Product added to cart");
+      localStorage.setItem("cart", JSON.stringify(data.populatedCart.items));
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  const getProduct = async () => {
+    try {
+      const { data } = await axios.get(
+        `${import.meta.env.VITE_API_URL}/api/v1/product/get-product/${
+          params.slug
+        }`
+      );
+      if (data.success) {
         console.log(data.product.photo.url);
         Setproduct(data.product);
         setMainImage(data.product.photo[0].url);
-  
-    }
+      }
     } catch (error) {
-        console.log(error);
-        toast.error("Something went wrong fetching Product");
+      console.log(error);
+      toast.error("Something went wrong fetching Product");
     }
-    
-}
-const getSimilarProduct=async()=>{
+  };
+  const getSimilarProduct = async () => {
     try {
-        console.log(product)
-        const{data}=await axios.get(`${import.meta.env.VITE_API_URL}/api/v1/product/get-similar-product/${product._id}/${product.category._id}`)
-    if(data.success){
+      console.log(product);
+      const { data } = await axios.get(
+        `${import.meta.env.VITE_API_URL}/api/v1/product/get-similar-product/${
+          product._id
+        }/${product.category._id}`
+      );
+      if (data.success) {
         console.log(data);
         Setsimilarproducts(data.products);
-    }
+      }
     } catch (error) {
-        console.log(error);
-        // toast.error("Something went wrong fetching similar product");
+      console.log(error);
+      // toast.error("Something went wrong fetching similar product");
     }
-    
-}
-useEffect(()=>{
-    if(params?.slug)
-    {
-        getProduct()
-      
+  };
+  useEffect(() => {
+    if (params?.slug) {
+      getProduct();
     }
- 
-    
-},[params.slug])
-useEffect(()=>{
+  }, [params.slug]);
+  useEffect(() => {
     getSimilarProduct();
-},[product])
+  }, [product]);
   return (
     <div>
       <Layout>
@@ -59,35 +85,48 @@ useEffect(()=>{
           <div className="grid grid-cols-2 gap-8">
             <div className="space-y-4">
               <div className="flex justify-center p-4 ">
-                { product && product.photo && product.photo.length >0 &&
-                <img
-                  // src={product?.photo[0]?.url}
-                  src={mainImage}
-                  alt="Product"
-                  className="h-[500px] w-full object-contain"
-               
-                  height={500}
-                  // style={{ aspectRatio: "300 / 500", objectFit: "cover" }}
-                />
-                }
+                {product && product.photo && product.photo.length > 0 && (
+                  <img
+                    // src={product?.photo[0]?.url}
+                    src={mainImage}
+                    alt="Product"
+                    className="h-[500px] w-full object-contain"
+                    height={500}
+                    // style={{ aspectRatio: "300 / 500", objectFit: "cover" }}
+                  />
+                )}
               </div>
               <div className="grid grid-cols-3 gap-2 p-4">
-  {product?.photo?.map((photo, index) => (
- <button key={index} className="focus:outline-none" onClick={() => setMainImage(photo.url)}>
- <img
-   src={photo.url}
-   alt={`Product thumbnail ${index}`}
-   className="h-[100px] w-[100px] object-cover"
-   width={100}
-   height={100}
-   style={{ aspectRatio: "100 / 100", objectFit: "cover" }}
- />
-</button>
-  ))}
-</div>
+                {product?.photo?.map((photo, index) => 
+                (
+                  <button
+                    key={index}
+                    className="focus:outline-none"
+                    onClick={() => setMainImage(photo.url)}
+                  >
+                    <img
+                      src={photo.url}
+                      alt={`Product thumbnail ${index}`}
+                      className={`h-[100px] w-[100px] object-cover ${
+                        photo.url === mainImage
+                          ? "border-red-500"
+                          : "border-black"
+                      } border-2 `}
+                      width={100}
+                      height={100}
+                      style={{ aspectRatio: "100 / 100", objectFit: "cover" }}
+                    />
+                  </button>
+                ))}
+              </div>
 
-              <button className="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 text-primary-foreground hover:bg-primary/90 h-10 px-4 py-2 w-full bg-[#ffcc00]">
-                ADD
+              <button className="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2  text-primary-foreground hover:bg-primary/90 h-10 px-4 py-2 w-full bg-[#ffcc00]"
+               onClick={() => {
+                alert("button")
+                if(product)
+                handleAddToCart(product);
+              }}>
+                Buy Now
               </button>
             </div>
             <div>
@@ -174,118 +213,113 @@ useEffect(()=>{
                   
                 </ol>
               </nav> */}
-       
-      <h2 className="max-w-xl mt-2 mb-6 text-2xl font-bold dark:text-gray-400 md:text-4xl">
-                      {product?.name}
-                    </h2>
-                    <div class="flex items-center space-x-2 my-2">
-        <div class="flex items-center text-yellow-400">
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="24"
-            height="24"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            stroke-width="2"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            class="w-5 h-5"
-          >
-            <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
-          </svg>
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="24"
-            height="24"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            stroke-width="2"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            class="w-5 h-5"
-          >
-            <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
-          </svg>
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="24"
-            height="24"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            stroke-width="2"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            class="w-5 h-5"
-          >
-            <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
-          </svg>
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="24"
-            height="24"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            stroke-width="2"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            class="w-5 h-5"
-          >
-            <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
-          </svg>
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="24"
-            height="24"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            stroke-width="2"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            class="w-5 h-5"
-          >
-            <path d="M12 17.8 5.8 21 7 14.1 2 9.3l7-1L12 2"></path>
-          </svg>
-        </div>
-       
 
-      </div>
-                    <span class="text-sm font-medium text-gray-600">1,945 Ratings &amp; 144 Reviews</span>
-      <div class="flex items-baseline space-x-2 mb-4">
-        <span class="text-4xl font-bold text-red-600">₹{product?.price}</span>
+              <h2 className="max-w-xl mt-2 mb-6 text-2xl font-bold dark:text-gray-400 md:text-4xl">
+                {product?.name}
+              </h2>
+              <div class="flex items-center space-x-2 my-2">
+                <div class="flex items-center text-yellow-400">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="24"
+                    height="24"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    class="w-5 h-5"
+                  >
+                    <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
+                  </svg>
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="24"
+                    height="24"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    class="w-5 h-5"
+                  >
+                    <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
+                  </svg>
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="24"
+                    height="24"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    class="w-5 h-5"
+                  >
+                    <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
+                  </svg>
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="24"
+                    height="24"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    class="w-5 h-5"
+                  >
+                    <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
+                  </svg>
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="24"
+                    height="24"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    class="w-5 h-5"
+                  >
+                    <path d="M12 17.8 5.8 21 7 14.1 2 9.3l7-1L12 2"></path>
+                  </svg>
+                </div>
+              </div>
+              <span class="text-sm font-medium text-gray-600">
+                1,945 Ratings &amp; 144 Reviews
+              </span>
+              <div class="flex items-baseline space-x-2 mb-4">
+                <span class="text-4xl font-bold text-red-600">
+                  ₹{product?.price}
+                </span>
+              </div>
+              <h3 class="text-lg font-semibold">Description</h3>
+              <p className="max-w-md mb-8 text-gray-700 dark:text-gray-400">
+                {product?.description}
+              </p>
+              <div class=" mx-auto">
+                <h2 class="text-2xl font-semibold">Specifications</h2>
 
-  
-      </div>
-      <h3 class="text-lg font-semibold">Description</h3>
-                    <p className="max-w-md mb-8 text-gray-700 dark:text-gray-400">
-                      {product?.description}
-                    </p>
-                    <div class=" mx-auto">
-                      <h2 class="text-2xl font-semibold">Specifications</h2>
-
-                      <div class="mt-4">
-                      
-                        <div className="border-t border-b py-4 space-y-4">
-  {product?.specifications
-?.map((spec, index) => (
-    <div key={index} className="flex justify-between">
-      <span className="text-sm">{spec.key}</span>
-      <span className="text-sm">{spec.value}</span>
-    </div>
-  ))}
-</div>
+                <div class="mt-4">
+                  <div className="border-t border-b py-4 space-y-4">
+                    {product?.specifications?.map((spec, index) => (
+                      <div key={index} className="flex justify-between">
+                        <span className="text-sm">{spec.key}</span>
+                        <span className="text-sm">{spec.value}</span>
                       </div>
-                    </div>
-                 
+                    ))}
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         </div>
-
-        
 
         <div className="bg-white">
           <div className="mx-auto max-w-2xl px-4 py-16 sm:px-6 sm:py-24 lg:max-w-7xl lg:px-8">
@@ -297,7 +331,7 @@ useEffect(()=>{
               {similarproducts &&
                 similarproducts.map((newproduct) => (
                   <div className="w-full max-w-sm bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
-                    <Link to ={`/product/${newproduct?.slug}`}>
+                    <Link to={`/product/${newproduct?.slug}`}>
                       <div
                         className="p-8 rounded-t-lg  bg-center h-48"
                         style={{
@@ -341,6 +375,6 @@ useEffect(()=>{
       </Layout>
     </div>
   );
-}
+};
 
-export default Productdetails
+export default Productdetails;

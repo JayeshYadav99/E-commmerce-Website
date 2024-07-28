@@ -2,7 +2,7 @@ import React from 'react'
 import Logo from "../../assets/online-shopping.png"
 export default function Footer() {
     return (
-        <div> <footer className="max-w-screen  bg-slate-800 sm:p-6 dark:bg-gray-800">
+        <div> <footer className="max-w-screen  bg-black sm:p-6 dark:bg-gray-800">
             <div className="mx-auto max-w-screen">
                 <div className="md:flex md:justify-between">
                     <div className="mb-6 md:mb-0">

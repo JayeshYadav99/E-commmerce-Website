@@ -387,12 +387,25 @@ export const SearchProductController = async (req, res) => {
   }
 };
 
+// Assuming you have the required imports and setup already
+
 export const getAllProductsController = async (req, res) => { 
   try {
     const products = await productModel.find({}).populate('category').sort({ createdAt: -1, _id: -1 });
+
+    // Grouping products by category
+    const groupedProducts = products.reduce((acc, product) => {
+      const category = product.category.name;
+      if (!acc[category]) {
+        acc[category] = [];
+      }
+      acc[category].push(product);
+      return acc;
+    }, {});
+
     res.status(200).send({
       success: true,
-      products,
+      products: groupedProducts,
       message: "All Products fetched successfully",
     });
     
@@ -403,9 +416,9 @@ export const getAllProductsController = async (req, res) => {
       message: "Error while fetching all products",
       error,
     });
-    
   }
-}
+};
+
 // export const ProductListController = async (req, res) => {
 //   try {
 //     const perPage=6;

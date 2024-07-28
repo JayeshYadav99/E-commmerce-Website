@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
 import Layout from '../../Components/Layout/Layout';
 import { useAuth } from '../../Context/Auth';
+import axios from 'axios';
 const BudgetSetter = () => {
   const [auth,SetAuth]=useAuth();
   console.log(auth);
-  const [currentBudget, setCurrentBudget] = useState(500);
+  const [currentBudget, setCurrentBudget] = useState(auth?.user?.budget|| 500);
   const [budgetUsedPercentage, setBudgetUsedPercentage] = useState(60); // Assuming 60% used for demonstration
   const handleBudgetChange = (e) => {
     // Update the current budget based on input, but only if it's a number
@@ -26,6 +27,8 @@ const BudgetSetter = () => {
     setCurrentBudget((prevBudget) => {
       const adjustment = prevBudget * (percentage / 100);
       const newBudget = prevBudget + adjustment;
+      //update database with new budget
+    
       // Update auth state with the new budget
       const updatedAuth = { ...auth, budget: newBudget };
       SetAuth({
@@ -37,8 +40,23 @@ const BudgetSetter = () => {
       return newBudget;
     });
   };
+  const UpdateDB =async(newBudget)=>{
+    try {
+      
+      const { data } = await axios.post(
+        `${import.meta.env.VITE_API_URL}/api/v1/auth/budget`,
+        { budget:newBudget }
+      );
+      console.log(data);
 
-  
+    } catch (error) {
+      console.log(error)
+    }
+
+  }
+ const SaveBudget = async()=>{
+  await UpdateDB(currentBudget);
+ }
   // Calculate the progress bar width based on budget used percentage
   const progressBarWidth = `${budgetUsedPercentage}%`;
 
@@ -47,7 +65,7 @@ const BudgetSetter = () => {
     <div className="space-y-1.5 p-6 flex flex-col items-start gap-1.5">
       <h3 className="whitespace-nowrap tracking-tight text-2xl font-bold">Budget Setter</h3>
       <p className="text-sm text-gray-500">
-        Set your spending limit to stay within budget
+        Set your spending limit to stay within budget {auth?.budget}
       </p>
     </div>
     <div className="p-6 flex flex-col gap-4">
@@ -55,13 +73,14 @@ const BudgetSetter = () => {
             <label htmlFor="current-budget" className="text-sm font-medium leading-none cursor-pointer opacity-70 flex-1">
               Current Budget
             </label>
-            <input
+            {/* <input
               id="current-budget"
               type="text" // Using "text" type for simplicity, consider "number" with more validation
               className="text-2xl font-semibold bg-transparent border-none w-xl text-right outline-none"
-              value={currentBudget}
-              onChange={handleBudgetChange}
-            />
+              value={Math.floor(currentBudget)}
+              // onChange={handleBudgetChange}
+            /> */}
+            {Math.floor(auth?.budget) || Math.floor(currentBudget)} 
           </div>
       <div className="flex items-center gap-4">
         <label className="text-sm font-medium leading-none cursor-not-allowed opacity-70 flex-1" htmlFor="budget-progress">
@@ -82,7 +101,11 @@ const BudgetSetter = () => {
       </div>
       {/* Other elements like Suggested Budget can be added similarly */}
     </div>
-    <div className="flex items-center p-6">
+    <div className="flex items-center p-6" onClick={() =>{
+      alert("button clicked")
+  SaveBudget()
+    } 
+     }>
       <button className="ml-auto bg-blue-500 text-white h-10 px-4 py-2 rounded-md hover:bg-blue-700 transition-colors">Save</button>
     </div>
   </div></Layout>

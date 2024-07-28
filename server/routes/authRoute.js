@@ -5,7 +5,9 @@ import {
   testController,
   forgotpasswordController,
   editProfileController,
-  updatePhoneController, // Add the new controller import
+  updatePhoneController, 
+  UpdateBudgetController
+  // Add the new controller import
 } from "../controllers/authController.js";
 import { isAdmin, requireSignIn } from "../middlewares/authMiddleware.js";
 //router object
@@ -24,7 +26,7 @@ router.post("/forgotpassword", forgotpasswordController);
 // Edit Profile || POST
 router.post("/editprofile", requireSignIn, editProfileController);
 router.post("/edit-phone", requireSignIn,updatePhoneController);
-
+router.post("/budget",requireSignIn,UpdateBudgetController)
 //test routes
 router.get("/test", requireSignIn, isAdmin, testController);
 

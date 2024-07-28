@@ -50,7 +50,7 @@ const handleLogout=()=>{
 
   return (
     <div><header>
-      <nav className="bg-slate-800 border-gray-200 px-4 lg:px-6 py-2 w-full  dark:bg-gray-800 ">
+      <nav className="bg-black border-gray-200 px-4 lg:px-6 py-2 w-full  dark:bg-gray-800 ">
         <div className="flex flex-wrap justify-between items-center">
           <div className="flex justify-start items-center">
            
@@ -141,7 +141,7 @@ const handleLogout=()=>{
         <div class="t-0 absolute left-3">
           {cartItems && cartItems.length > 0 && (
             <p class="flex h-2 w-2 items-center justify-center rounded-full bg-red-500 p-3 text-xs">
-              {cartItems.length}
+              {cartItems?.length || 0}
             </p>
           )}
         </div>

@@ -125,7 +125,7 @@ const UserMenu = () => {
                 >
                   Manage Addresses
                 </NavLink>
-                <NavLink
+                {/* <NavLink
                   to="/pan-card-information"
                   activeClassName="bg-blue-500 text-gray-700"
                   className="block px-3 py-2 rounded-md text-gray-700 hover:bg-gray-100"
@@ -135,9 +135,9 @@ const UserMenu = () => {
                   })}
                 >
                   PAN Card Information
-                </NavLink>
+                </NavLink> */}
               </div>
-              <NavLink
+              {/* <NavLink
                 to="/payments"
                 activeClassName="bg-blue-500 "
                 className="flex items-center space-x-2 px-3 py-2 rounded-md text-gray-700"
@@ -185,7 +185,7 @@ const UserMenu = () => {
                 >
                   Saved Cards
                 </NavLink>
-              </div>
+              </div> */}
             </nav>
           </div>
 

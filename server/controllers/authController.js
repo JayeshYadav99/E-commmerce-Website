@@ -111,6 +111,7 @@ export const loginController = async (req, res) => {
         email: user.email,
         phone: user.phone,
         address: user.address,
+        budget:user.budget,
         role:user.role
       },
       token,
@@ -269,3 +270,52 @@ export const updatePhoneController = async (req, res) => {
   }
 };
 
+export const UpdateBudgetController = async (req, res) => {
+  try {
+    const userId = req.user._id; // Assuming you have middleware to extract user details from the token
+    const { budget } = req.body;
+
+    // Check if the user exists
+    const user = await userModel.findById(userId);
+
+    if (!user) {
+      return res.status(404).send({
+        success: false,
+        message: "User not found",
+      });
+    }
+
+    // Update budget
+    if (budget) {
+      user.budget = budget;
+      // Save the updated user details
+      await user.save();
+
+      res.status(200).send({
+        success: true,
+        message: "Budget updated successfully",
+        user: {
+          _id: user._id,
+          name: user.name,
+          email: user.email,
+          phone: user.phone,
+          address: user.address,
+          role: user.role,
+          budget: user.budget,
+        },
+      });
+    } else {
+      return res.status(400).send({
+        success: false,
+        message: "Budget is required for update",
+      });
+    }
+  } catch (error) {
+    console.log(error);
+    res.status(500).send({
+      success: false,
+      message: "Error updating budget",
+      error,
+    });
+  }
+}

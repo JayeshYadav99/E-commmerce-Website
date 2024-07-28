@@ -10,7 +10,7 @@ import { useNavigate } from "react-router-dom";
 import { useSearch } from "../../Context/Search";
 import Skeleton from "react-loading-skeleton";
 import { Link } from "react-router-dom";
-
+import { truncateText } from "../../Components/Utility/helpers";
 import { useCart } from "../../Context/Cart";
 const ProductGallery = () => {
   const [cartItems, SetcartItems] = useCart();
@@ -483,7 +483,7 @@ Off-canvas filters for mobile, show/hide based on off-canvas filters state.
                                 htmlFor="filter-mobile-category-0"
                                 className="ml-3 min-w-0 flex-1 text-gray-500"
                               >
-                                New Arrivals
+                                Fresh Groceries 
                               </label>
                             </div>
                             <div className="flex items-center">
@@ -699,7 +699,7 @@ Off-canvas filters for mobile, show/hide based on off-canvas filters state.
           <main className="mx-auto max-w-7xl  ">
             <div className="flex items-baseline justify-between border-b border-gray-200 pb-6 pt-8">
               <h1 className="text-4xl font-bold tracking-tight text-gray-900">
-                New Arrivals{" "}
+                Fresh Groceries{" "}
               </h1>
 
               <div className="flex items-center">
@@ -930,150 +930,7 @@ Off-canvas filters for mobile, show/hide based on off-canvas filters state.
                     )}
                   </div>
 
-                  <div className="border-b border-gray-200 py-6">
-                    <h3 className="-mx-2 -my-3 flow-root">
-                      {/* Expand/collapse section button */}
-                      <button
-                        type="button"
-                        className={`flex w-full items-center justify-between bg-white px-2 py-3 text-gray-400 hover:text-gray-500 ${
-                          isSectionOpen ? "block" : "block"
-                        } `}
-                        onClick={() => toggleSection("colorSection")}
-                        aria-controls="filter-section-mobile-0"
-                        // aria-expanded={isSectionOpen}
-                      >
-                        <span className="font-medium text-gray-900">Color</span>
-                        <span className="ml-6 flex items-center">
-                          {/* Expand icon, show/hide based on section open state. */}
-                          {!isSectionOpen.colorSection ? (
-                            <svg
-                              className="h-10 w-5"
-                              viewBox="0 0 20 20"
-                              fill="currentColor"
-                              aria-hidden="true"
-                            >
-                              <path d="M10.75 4.75a.75.75 0 00-1.5 0v4.5h-4.5a.75.75 0 000 1.5h4.5v4.5a.75.75 0 001.5 0v-4.5h4.5a.75.75 0 000-1.5h-4.5v-4.5z" />
-                            </svg>
-                          ) : (
-                            <svg
-                              className="h-5 w-5"
-                              viewBox="0 0 20 20"
-                              fill="currentColor"
-                              aria-hidden="true"
-                            >
-                              <path
-                                fillRule="evenodd"
-                                d="M4 10a.75.75 0 01.75-.75h10.5a.75.75 0 010 1.5H4.75A.75.75 0 014 10z"
-                                clipRule="evenodd"
-                              />
-                            </svg>
-                          )}
-
-                          {/* Collapse icon, show/hide based on section open state. */}
-                        </span>
-                      </button>
-                    </h3>
-                    {/* Content of the section here */}
-                    {isSectionOpen.colorSection && (
-                      <div className="pt-6" id="filter-section-0">
-                        <div className="space-y-4">
-                          <div className="flex items-center">
-                            <input
-                              id="filter-color-0"
-                              name="color[]"
-                              defaultValue="white"
-                              type="checkbox"
-                              className="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
-                            />
-                            <label
-                              htmlFor="filter-color-0"
-                              className="ml-3 text-sm text-gray-600"
-                            >
-                              White
-                            </label>
-                          </div>
-                          <div className="flex items-center">
-                            <input
-                              id="filter-color-1"
-                              name="color[]"
-                              defaultValue="beige"
-                              type="checkbox"
-                              className="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
-                            />
-                            <label
-                              htmlFor="filter-color-1"
-                              className="ml-3 text-sm text-gray-600"
-                            >
-                              Beige
-                            </label>
-                          </div>
-                          <div className="flex items-center">
-                            <input
-                              id="filter-color-2"
-                              name="color[]"
-                              defaultValue="blue"
-                              type="checkbox"
-                              defaultChecked
-                              className="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
-                            />
-                            <label
-                              htmlFor="filter-color-2"
-                              className="ml-3 text-sm text-gray-600"
-                            >
-                              Blue
-                            </label>
-                          </div>
-                          <div className="flex items-center">
-                            <input
-                              id="filter-color-3"
-                              name="color[]"
-                              defaultValue="brown"
-                              type="checkbox"
-                              className="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
-                            />
-                            <label
-                              htmlFor="filter-color-3"
-                              className="ml-3 text-sm text-gray-600"
-                            >
-                              Brown
-                            </label>
-                          </div>
-                          <div className="flex items-center">
-                            <input
-                              id="filter-color-4"
-                              name="color[]"
-                              defaultValue="green"
-                              type="checkbox"
-                              className="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
-                            />
-                            <label
-                              htmlFor="filter-color-4"
-                              className="ml-3 text-sm text-gray-600"
-                            >
-                              Green
-                            </label>
-                          </div>
-                          <div className="flex items-center">
-                            <input
-                              id="filter-color-5"
-                              name="color[]"
-                              defaultValue="purple"
-                              type="checkbox"
-                              className="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
-                            />
-                            <label
-                              htmlFor="filter-color-5"
-                              className="ml-3 text-sm text-gray-600"
-                            >
-                              Purple
-                            </label>
-                          </div>
-                        </div>
-                      </div>
-                    )}
-
-                    {/* Filter section, show/hide based on section state. */}
-                  </div>
+               
                   <div className="border-b border-gray-200 py-6">
                     <h3 className="-mx-2 -my-3 flow-root">
                       {/* Expand/collapse section button */}
@@ -1147,7 +1004,7 @@ Off-canvas filters for mobile, show/hide based on off-canvas filters state.
                       </div>
                     )}
                     <button
-                      className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4  mt-4 "
+                      className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4  mt-8 "
                       onClick={() => window.location.reload()}
                     >
                       Reset Filters
@@ -1228,7 +1085,7 @@ Off-canvas filters for mobile, show/hide based on off-canvas filters state.
                             }
                           >
                             <h5 className="text-xl font-semibold tracking-tight text-gray-900 dark:text-white">
-                              {product?.name}
+                              {truncateText(product?.name,32)}
                             </h5>
                           </button>
                           <div className="flex items-center mt-2.5 mb-5">
