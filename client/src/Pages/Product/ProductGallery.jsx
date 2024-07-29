@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect, useCallback } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { useAuth } from "../../Context/Auth";
 import axios from "axios";
 import Layout from "../../Components/Layout/Layout";
@@ -6,32 +6,33 @@ import "react-toastify/dist/ReactToastify.css";
 import { Prices } from "../../Components/Utility/Prices";
 import { BarLoader } from "react-spinners";
 import { toast } from "react-toastify";
-import { useNavigate } from "react-router-dom";
-import { useSearch } from "../../Context/Search";
+import { useNavigate, useLocation } from "react-router-dom";
 import Skeleton from "react-loading-skeleton";
 import { Link } from "react-router-dom";
 import { truncateText } from "../../Components/Utility/helpers";
 import { useCart } from "../../Context/Cart";
+
 const ProductGallery = () => {
-  const [cartItems, SetcartItems] = useCart();
+  const [cartItems, setCartItems] = useCart();
   const navigate = useNavigate();
-  const [searchQuery, setSearchQuery] = useSearch();
-  const [products, Setproducts] = useState([]);
-  const [categories, Setcategories] = useState([]);
-  const [Loading, SetLoading] = useState(false);
-  const [PageLoading, SetPageLoading] = useState(false);
-  const [auth, SetAuth] = useAuth();
-  const [checked, Setchecked] = useState([]);
+  const location = useLocation();
+  const [products, setProducts] = useState([]);
+  const [categories, setCategories] = useState([]);
+  const [Loading, setLoading] = useState(false);
+
+  const [PageLoading, setPageLoading] = useState(false);
+  const [auth, setAuth] = useAuth();
+  const [checked, setChecked] = useState([]);
   const [radio, setRadio] = useState([]);
-  const [total, Settotal] = useState();
-  const [page, Setpage] = useState(1);
+  const [total, setTotal] = useState();
+  const [page, setPage] = useState(1);
   const observer = useRef();
   const [isSectionOpen, setIsSectionOpen] = useState({
     colorSection: false,
     categorySection: false,
-    SizeSection: false,
-    SortSection: false,
-    DialogSection: false,
+    sizeSection: false,
+    sortSection: false,
+    dialogSection: false,
   });
 
   const toggleSection = (section) => {
@@ -40,24 +41,24 @@ const ProductGallery = () => {
       [section]: !prevIsSectionOpen[section],
     }));
   };
-  const getAllproducts = async () => {
+
+  const getAllProducts = async () => {
     try {
-      SetLoading(true);
-      const keyword = searchQuery.keyword || "all";
+      setLoading(true);
+      const searchParams = new URLSearchParams(location.search);
+      const keyword = searchParams.get("keyword") || "all";
+      const page = searchParams.get("page") || 1;
       const { data } = await axios.post(
-        `${import.meta.env.VITE_API_URL}/api/v1/product/search/${keyword}/${
-          searchQuery.page
-        }`,
+        `${
+          import.meta.env.VITE_API_URL
+        }/api/v1/product/search/${keyword}/${page}`,
         { checked, radio }
       );
-
-      SetLoading(false);
-      Setpage(searchQuery.page);
+      setLoading(false);
+      setPage(page);
       if (data.success) {
-        // console.log(data.products[0].category.name);
-        console.log(data);
-        Setproducts(data.result);
-        Settotal(data.resultCount || data.productsCount);
+        setProducts(data.result);
+        setTotal(data.resultCount || data.productsCount);
       }
     } catch (error) {
       console.log(error);
@@ -71,81 +72,57 @@ const ProductGallery = () => {
         `${import.meta.env.VITE_API_URL}/api/v1/category/get-category`
       );
       if (data.success) {
-        console.log(data.category[0].name);
-        Setcategories(data.category);
+        setCategories(data.category);
       }
     } catch (error) {
       console.log(error);
       toast.error("Something went wrong fetching categories");
     }
   };
-  //    useEffect(() => {
 
-  //     getAllproducts();
-  //   }, [])
   useEffect(() => {
     getAllCategory();
   }, []);
+
   useEffect(() => {
-    if (checked.length || radio.length) getAllproducts();
-    Filterproduct();
-  }, [checked, radio]);
+    if (checked.length || radio.length) getAllProducts();
+  }, [checked, radio, location.search]);
 
   const handleSort = (sortBy) => {
-    // SetLoading(true);
-
-    Setproducts((prevProducts) => {
+    setProducts((prevProducts) => {
       if (sortBy === "price-low-to-high") {
         return prevProducts.slice().sort((a, b) => a.price - b.price);
       } else if (sortBy === "price-high-to-low") {
         return prevProducts.slice().sort((a, b) => b.price - a.price);
       }
-      // Add more sorting options as needed
-      return prevProducts; // If an invalid option is provided, return the original array
+      return prevProducts;
     });
   };
+
   const handleFilter = (value, id) => {
     let all = [...checked];
-    console.log(checked);
     if (value) {
       all.push(id);
     } else {
       all = all.filter((c) => c !== id);
     }
-    Setchecked(all);
-  };
-  const Filterproduct = async () => {
-    try {
-      const { data } = await axios.post(
-        `${import.meta.env.VITE_API_URL}/api/v1/product/product-filter`,
-        {
-          checked,
-          radio,
-        }
-      );
-
-      // Setproducts(data.products);
-    } catch (error) {
-      console.log(error);
-    }
+    setChecked(all);
   };
 
   const loadMoreProducts = async () => {
     try {
-      console.log(page);
-      console.log(searchQuery.page);
-      SetPageLoading(true);
+      setPageLoading(true);
+      const searchParams = new URLSearchParams(location.search);
+      const keyword = searchParams.get("keyword") || "all";
       const { data } = await axios.post(
-        `${import.meta.env.VITE_API_URL}/api/v1/product/search/${
-          searchQuery.keyword
-        }/${page}`,
+        `${
+          import.meta.env.VITE_API_URL
+        }/api/v1/product/search/${keyword}/${page}`,
         { checked, radio }
       );
-
       if (data.success) {
-        console.log(products);
-        SetPageLoading(false);
-        Setproducts((prevProducts) => [...prevProducts, ...data.result]);
+        setPageLoading(false);
+        setProducts((prevProducts) => [...prevProducts, ...data.result]);
       }
     } catch (error) {
       console.log(error);
@@ -155,14 +132,12 @@ const ProductGallery = () => {
 
   const handleAddToCart = async (product) => {
     if (!auth) return navigate("/login");
-
     try {
       const { data } = await axios.put(
         `${import.meta.env.VITE_API_URL}/api/v1/cart/${auth.user._id}`,
         { productId: product._id, quantity: 1, action: "addItem" }
       );
-      console.log(data);
-      SetcartItems((prevCartItems) => [...data.populatedCart.items]);
+      setCartItems((prevCartItems) => [...data.populatedCart.items]);
       if (data.total > auth?.budget) {
         toast.error("You have exceeded your budget");
         return;
@@ -178,9 +153,10 @@ const ProductGallery = () => {
     if (page === 1) return;
     loadMoreProducts();
   }, [page]);
+
   useEffect(() => {
-    if (!checked.length || !radio.length) getAllproducts();
-  }, [checked.length, radio.length, searchQuery.keyword]);
+    if (!checked.length || !radio.length) getAllProducts();
+  }, [checked.length, radio.length, location.search]);
   return (
     <Layout title={"All Products Gallery"}>
       <div className="bg-white ">
@@ -483,7 +459,7 @@ Off-canvas filters for mobile, show/hide based on off-canvas filters state.
                                 htmlFor="filter-mobile-category-0"
                                 className="ml-3 min-w-0 flex-1 text-gray-500"
                               >
-                                Fresh Groceries 
+                                Fresh Groceries
                               </label>
                             </div>
                             <div className="flex items-center">
@@ -930,7 +906,6 @@ Off-canvas filters for mobile, show/hide based on off-canvas filters state.
                     )}
                   </div>
 
-               
                   <div className="border-b border-gray-200 py-6">
                     <h3 className="-mx-2 -my-3 flow-root">
                       {/* Expand/collapse section button */}
@@ -1005,7 +980,10 @@ Off-canvas filters for mobile, show/hide based on off-canvas filters state.
                     )}
                     <button
                       className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4  mt-8 "
-                      onClick={() => window.location.reload()}
+                      onClick={() => {
+                        setChecked([]);
+                        setRadio([]);
+                      }}
                     >
                       Reset Filters
                     </button>
@@ -1062,7 +1040,10 @@ Off-canvas filters for mobile, show/hide based on off-canvas filters state.
                       ))}
 
                     {products.map((product) => (
-                      <div className="w-full max-w-sm bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
+                      <div
+                        className="w-full max-w-sm bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700"
+                        key={product._id}
+                      >
                         <Link to={`/product/${product?.slug}`}>
                           {product && product?.photo && (
                             <div
@@ -1085,7 +1066,7 @@ Off-canvas filters for mobile, show/hide based on off-canvas filters state.
                             }
                           >
                             <h5 className="text-xl font-semibold tracking-tight text-gray-900 dark:text-white">
-                              {truncateText(product?.name,32)}
+                              {truncateText(product?.name, 32)}
                             </h5>
                           </button>
                           <div className="flex items-center mt-2.5 mb-5">
@@ -1153,12 +1134,12 @@ Off-canvas filters for mobile, show/hide based on off-canvas filters state.
                         </div>
                       ))}
 
-                    {products.length < total && (
+                    {products.length < total && products.length > 3 && (
                       <button
                         className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
                         onClick={(e) => {
                           e.preventDefault();
-                          Setpage(page + 1);
+                          setPage(page + 1);
                         }}
                       >
                         Load More

@@ -102,7 +102,7 @@ const BudgetSetter = () => {
       {/* Other elements like Suggested Budget can be added similarly */}
     </div>
     <div className="flex items-center p-6" onClick={() =>{
-      alert("button clicked")
+      // alert("button clicked")
   SaveBudget()
     } 
      }>

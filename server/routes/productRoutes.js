@@ -9,7 +9,9 @@ import {
   productPhotoController,
   updateProductController,
   productFilterController,createProductControllercloud, SearchProductController, RelatedProductController,
-  getAllProductsController
+  getAllProductsController,
+  globalSearch,
+  getProductsByCategoryController
 } from "../controllers/productController.js";
 import { isAdmin, requireSignIn } from "../middlewares/authMiddleware.js";
 import formidable from "express-formidable";
@@ -70,5 +72,8 @@ router.post("/search/:keyword/:page",SearchProductController);
 router.get("/get-all-products",getAllProductsController);
 //fetch similar products
 router.get("/get-similar-product/:pid/:cid",RelatedProductController);
+router.post("/globalSearch", globalSearch);
+router.get('/category/:categoryId', getProductsByCategoryController);
+
 
 export default router;

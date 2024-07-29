@@ -34,6 +34,7 @@ import OrderSuccessPage from './Pages/Cart/OrderSuccessPage';
 import UserMenu from './Components/Menu/UserMenu';
 import OrderDetailsPage from './Pages/Cart/OrderDetailsPage';
 import Budget from './Pages/Personalized/Budget';
+import ProductCategory from './Pages/Product/ProductCategory';
 function App() {
 const[stripeapikey,setStripeapikey]=useState('');
 async function getStripeApiKey(){
@@ -57,6 +58,7 @@ useEffect(()=>{
   //Checking Component Routes
   <Route path='/UserMenu'element={<UserMenu/>}/>
     <Route path='/Test'element={<Test/>}/>
+    <Route path="/category/:categoryId" element={<ProductCategory />} />
    
     <Route path='/Test'element={<Test/>}/>
     <Route path='/Search'element={<SearchPage/>}/>

@@ -13,7 +13,7 @@ const Users = () => {
         {/* AdminDashboard */}
         <div className="flex-1 p-12">
 
-            <h3 className="text-base font-semibold leading-7 text-gray-900">Manage Users</h3>
+            <h3 className="text-base font-semibold leading-7 text-gray-900">Track Customers Feature</h3>
           
       
 

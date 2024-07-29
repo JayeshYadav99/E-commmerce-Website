@@ -1,4 +1,7 @@
 import productModel from "../models/productModel.js";
+import Category from "../models/categoryModel.js";
+import Products from "../models/productModel.js";
+import Order from "../models/orderModel.js";
 import fs from "fs";
 import slugify from "slugify";
 import { v2 as cloudinary } from 'cloudinary';
@@ -228,8 +231,8 @@ export const updateProductController = async (req, res) => {
         return res.status(500).send({ error: "Category is Required" });
       case !quantity:
         return res.status(500).send({ error: "Quantity is Required" });
-        case !photos || photos.length === 0:
-          return res.status(400).send({ error: "At least one photo is required" });
+        // case !photos || photos.length === 0:
+        //   return res.status(400).send({ error: "At least one photo is required" });
     }
 
     // const products = await productModel.findByIdAndUpdate(
@@ -341,7 +344,7 @@ export const SearchProductController = async (req, res) => {
     const { checked, radio } = req.body;
 
     const pipeline = [];
-    if (checked.length > 0) {
+    if (checked && checked.length > 0) {
       const categoryIds = checked.map((id) => new mongoose.Types.ObjectId(id));
       pipeline.push({ $match: { category: { $in: categoryIds } } });
     }
@@ -357,7 +360,7 @@ export const SearchProductController = async (req, res) => {
     }
 
 
-    if (radio.length) {
+    if (radio && radio.length) {
       pipeline.push({ $match: { price: { $gte: radio[0], $lte: radio[1] } } });
     }
 
@@ -414,6 +417,49 @@ export const getAllProductsController = async (req, res) => {
     res.status(500).send({
       success: false,
       message: "Error while fetching all products",
+      error,
+    });
+  }
+};
+export const getProductsByCategoryController = async (req, res) => {
+  try {
+    const { categoryId } = req.params;
+
+    // Ensure categoryId is provided
+    if (!categoryId) {
+      return res.status(400).send({
+        success: false,
+        message: "Category ID is required",
+      });
+    }
+
+    // Fetch products for the specific category
+    const products = await productModel
+      .find({ category: categoryId })
+      .populate('category')
+      .sort({ createdAt: -1, _id: -1 });
+
+    // If no products are found for the category
+    if (products.length === 0) {
+      return res.status(404).send({
+        success: false,
+        message: "No products found for this category",
+      });
+    }
+
+    // Send the products as response
+    res.status(200).send({
+      success: true,
+      products,
+      name:products[0].category.name,
+      message: "Products fetched successfully for the category",
+    });
+
+  } catch (error) {
+    console.log(error);
+    res.status(500).send({
+      success: false,
+      message: "Error while fetching products for the category",
       error,
     });
   }
@@ -509,3 +555,86 @@ export const createCartProductController = async (req, res) => {
     });
   }
 }
+
+export const globalSearch = async (req, res) =>{
+  try {
+   
+
+    const { query, type } = req.body;
+    console.log(query, type);
+    const regexQuery = new RegExp(query, "i"); 
+
+    let results = [];
+
+    const modelsAndTypes = [
+      { model: Category, searchField: "name", type: "category" },
+      { model: Products, searchField: "name", type: "product" },
+      // { model: Order, searchField: "_id", type: "Order" },
+    ];
+
+    const typeLower = type?.toLowerCase();
+
+    if (!typeLower || !SearchableTypes.includes(typeLower)) {
+      // SEARCH ACROSS EVERYTHING
+
+      for (const { model, searchField, type } of modelsAndTypes) {
+        const queryResults = await model
+          .find({ [searchField]: regexQuery })
+          .limit(2);
+
+        results.push(
+          ...queryResults.map((item) => ({
+            title:
+              type === "product" ? ` ${item.name}` : item[searchField],
+          
+            type,
+            id:
+              type === "product"
+                ? item.slug
+                : type === "answer"
+                  ? item.question
+                  : item._id,
+                  ...(type === "product" && { image: item.photo[0].url }), 
+          }))
+        );
+      }
+    } else {
+      // SEARCH IN THE SPECIFIED MODEL TYPE
+      const modelInfo = modelsAndTypes.find((item) => item.type === type);
+
+      if (!modelInfo) {
+        throw new Error("Invalid search type");
+      }
+
+      const queryResults = await modelInfo.model
+        .find({ [modelInfo.searchField]: regexQuery })
+        .limit(8);
+
+      results = queryResults.map((item) => ({
+        title:
+          type === "answer"
+            ? `Answers containing ${query}`
+            : item[modelInfo.searchField],
+        type,
+        id:
+          type === "user"
+            ? item.clerkId
+            : type === "answer"
+              ? item.question
+              : item._id,
+      }));
+    }
+    console.log(results)
+    res.status(200).send({
+      success: true,
+      results, 
+      message: "Cart Product fetched successfully",
+    });
+  
+  } catch (error) {
+    console.log(`Error fetching global results, ${error}`);
+    throw error;
+  }
+
+}
+
