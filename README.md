@@ -1,5 +1,5 @@
 
-# Transparent Ecommerce Website
+# PureCart - Your Transparent Grocery Solution
 
 Welcome to the Transparent Ecommerce Website, an innovative platform designed with your health and budget in mind. Our mission is to streamline your grocery shopping experience, making it effortless to purchase high-quality products that align with your wellness goals and financial plans. Dive into a world where convenience meets conscientious shopping.
 
