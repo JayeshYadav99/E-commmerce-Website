@@ -16,7 +16,7 @@ Welcome to the Transparent Ecommerce Website, an innovative platform designed wi
   
 - **Budget Setter:** A groundbreaking feature designed to empower your shopping experience. Set a budget for your grocery shopping, and our system will help you stay within your financial boundaries without compromising on quality or necessity. This proactive approach ensures that you're always in control of your spending.
   
-- ** Global Search for Product and Category:**Find exactly what you need quickly with our global search feature, allowing you to search for products and categories across the entire platform with ease.
+- **Global Search for Product and Category:** Find exactly what you need quickly with our global search feature, allowing you to search for products and categories across the entire platform with ease.
 
 ### New and Upcoming Features
 
