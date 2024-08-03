@@ -79,11 +79,14 @@ const UpdateProduct = () => {
 const getSingleProduct=async()=>{
     try{
         const { data } = await axios(`${import.meta.env.VITE_API_URL}/api/v1/product/get-product/${params.slug}`);
+        console.log(data);
         if(data.success)
         {
+          
           console.log(data.product.category.name);
           console.log(data.product.photo);
           const{product}=data;
+          console.log(product)
   Setname(product.name);
   Setdescription(product.description);
   Setprice(product.price);
@@ -104,7 +107,7 @@ const getSingleProduct=async()=>{
     catch(error)
     {
         console.log(error);
-        toast.error("Something went wrong fetching");
+        // toast.error("Something went wrong fetching");
         
     }
 }

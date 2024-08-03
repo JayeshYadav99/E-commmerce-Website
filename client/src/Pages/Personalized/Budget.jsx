@@ -22,6 +22,10 @@ const BudgetSetter = () => {
       const updatedAuth = { ...auth, budget: newBudget };
       SetAuth({
         ...auth,
+        user:{
+          ...auth.user,
+          budget: newBudget
+        },
         budget: newBudget
       });
 
@@ -34,7 +38,7 @@ const BudgetSetter = () => {
       const adjustment = prevBudget * (percentage / 100);
       const newBudget = prevBudget + adjustment;
       //update database with new budget
-    
+      UpdateDB(newBudget);
       // Update auth state with the new budget
       const updatedAuth = { ...auth, budget: newBudget };
       SetAuth({

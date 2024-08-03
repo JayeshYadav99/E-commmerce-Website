@@ -6,11 +6,13 @@ import { useNavigate, Link, json } from "react-router-dom";
 import axios from "axios";
 import PaymentCheckout from "./PaymentCheckout";
 import { toast } from "react-toastify";
+
 const CartPage = () => {
   const [auth, setAuth] = useAuth();
   const [cartItems, setCartItems] = useCart();
   const [cartproducts, setCartProducts] = useState([]);
   const [Loading, SetLoading] = useState(false);
+  const [Total,setTotal]=useState(0);
   const navigate = useNavigate();
 
   const fetchCartDetails = async (userID) => {
@@ -22,7 +24,8 @@ const CartPage = () => {
       ); // Adjust the API endpoint
 
       // Create an array to hold product details
-      const products = response.data.items.map((cartItem) => {
+      const{cart,total}=response.data;
+      const products = cart.items.map((cartItem) => {
         console.log(cartItem.quantity);
         return {
           _id: cartItem._id,
@@ -34,9 +37,10 @@ const CartPage = () => {
           // Add other product details as needed
         };
       });
-      console.log(response.data);
+      console.log(cart,total);
       // Update the cart items in the context
       setCartItems(products);
+      setTotal(total);
 
       // setCartItems(response.data[0].quantity);
       // setCartProducts(products);
@@ -123,7 +127,10 @@ const CartPage = () => {
 
       if (action === "+") {
         console.log(product.quantity, "+");
-        // TotalPrice()
+        if (Total > auth?.user?.budget) {
+          toast.error("You have exceeded your budget");
+        }
+
         newQuantity = product.quantity + 1;
         console.log(newQuantity);
       } else if (action === "-" && product.quantity > 0) {

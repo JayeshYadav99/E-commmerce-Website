@@ -24,7 +24,12 @@ export const getCart = async (req, res) => {
     if (!cart) {
       return res.status(404).json({ error: 'Cart not found' });
     }
-    res.json(cart);
+
+    const total = cart.items.reduce((acc, item) => {
+      return acc + item.product.price * item.quantity;
+    }, 0);
+
+    res.json({ cart, total });
   } catch (error) {
     console.log(error)
     res.status(500).json({ error: 'Internal Server Error' });
