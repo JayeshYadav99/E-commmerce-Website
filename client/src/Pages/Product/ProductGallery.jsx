@@ -138,7 +138,7 @@ const ProductGallery = () => {
         { productId: product._id, quantity: 1, action: "addItem" }
       );
       setCartItems((prevCartItems) => [...data.populatedCart.items]);
-      if (data.total > auth?.budget) {
+      if (data.total > auth?.user?.budget) {
         toast.error("You have exceeded your budget");
         return;
       }

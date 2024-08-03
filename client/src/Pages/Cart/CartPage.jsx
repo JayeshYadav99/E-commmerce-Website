@@ -57,8 +57,8 @@ const CartPage = () => {
     try {
       let total = 0;
       cartItems?.map((item) => (total += item.price));
-      console.log(total, auth?.budget);
-      if (total > auth?.budget) {
+      console.log(total, auth?.user?.budget);
+      if (total > auth?.user?.budget) {
         console.log("Budget Exceeded Bhai ruk ja");
       }
       return total;
@@ -150,7 +150,7 @@ const CartPage = () => {
         console.log(response.data);
         const { total } = response.data;
         console.log(total, auth);
-        if (total > auth?.budget) {
+        if (total > auth?.user?.budget) {
           toast.error("You have exceeded your budget");
         }
         const products = response.data.populatedCart.items.map((cartItem) => {
