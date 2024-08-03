@@ -1,10 +1,16 @@
 import React, { useState } from 'react';
 import Layout from '../../Components/Layout/Layout';
 import { useAuth } from '../../Context/Auth';
+import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 const BudgetSetter = () => {
+  const navigate = useNavigate();
   const [auth,SetAuth]=useAuth();
   console.log(auth);
+  // if(!auth.user)
+  // {
+  //   navigate('/login');
+  // }
   const [currentBudget, setCurrentBudget] = useState(auth?.user?.budget|| 500);
   const [budgetUsedPercentage, setBudgetUsedPercentage] = useState(60); // Assuming 60% used for demonstration
   const handleBudgetChange = (e) => {

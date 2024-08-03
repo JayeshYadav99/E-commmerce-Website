@@ -65,7 +65,7 @@ const Forgotpassword = () => {
       <div>
         <img
           className="mx-auto h-12 w-auto"
-          src="online-shop.png"  // Replace with your logo image path
+          src="./shopping-bag.png"  // Replace with your logo image path
           alt="E-commerce Logo"
         />
         <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">

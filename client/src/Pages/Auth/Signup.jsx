@@ -6,6 +6,7 @@ import * as Yup from 'yup';
 import { useNavigate } from 'react-router-dom';
 import {toast } from "react-toastify"
 import 'react-toastify/dist/ReactToastify.css';
+import Logo from "../../assets/shopping-bag.png"
 
 function RegistrationForm() {
   // Define your initial form values
@@ -71,7 +72,7 @@ function RegistrationForm() {
           <div>
             <img
               className="mx-auto h-12 w-auto"
-              src="online-shop.png"
+              src={Logo}
               alt="E-commerce Logo"
             />
             <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">

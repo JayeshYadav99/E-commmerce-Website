@@ -1,5 +1,5 @@
 import React from 'react'
-import Logo from "../../assets/online-shopping.png"
+import Logo from "../../assets/shopping-bag.png"
 export default function Footer() {
     return (
         <div> <footer className="max-w-screen  bg-black sm:p-6 dark:bg-gray-800">
@@ -10,7 +10,7 @@ export default function Footer() {
                             <img src={Logo} className="mr-3 h-8" alt="FlowBite Logo" />
 
                             <span className="self-center text-3xl font-semibold whitespace-nowrap text-white dark:text-white">
-                                ShopSage
+                                PureCart
                             </span>
                         </a>
                     </div>
@@ -19,7 +19,7 @@ export default function Footer() {
                             <h2 className="mb-6 text-lg font-semibold text-white uppercase dark:text-white">Resources</h2>
                             <ul className="text-white text-xl dark:text-gray-400 ">
                                 <li className="mb-4">
-                                    <a href="/" className="hover:underline">ShopSage</a>
+                                    <a href="/" className="hover:underline">PureCart</a>
                                 </li>
                                 <li>
                                     <a href="/" className="hover:underline">Customer Feedback</a>
@@ -52,7 +52,7 @@ export default function Footer() {
                 </div>
                 <hr className="my-6 border-gray-200 sm:mx-auto dark:border-gray-700 lg:my-8" />
                 <div className="sm:flex sm:items-center sm:justify-between">
-                    <span className="text-sm text-white sm:text-center dark:text-gray-400">© 2023 <a href="/" className="hover:underline">ShopSage</a>. All Rights Reserved.
+                    <span className="text-sm text-white sm:text-center dark:text-gray-400">© 2023 <a href="/" className="hover:underline">PureCart</a>. All Rights Reserved.
                     </span>
                     <div className="flex mt-4 space-x-6 sm:justify-center sm:mt-0">
                         <a href="#" className="text-white hover:text-gray-900 dark:hover:text-white">

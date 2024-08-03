@@ -1,6 +1,7 @@
 import React, { useState, useContext } from 'react';
 // import AuthContext from "../../Context/AuthProvider"
 import axios from "axios";
+import Logo from "../../assets/shopping-bag.png"
 import { useNavigate,useLocation ,Link} from "react-router-dom"
 import Layout from '../../Components/Layout/Layout';
 import {useAuth} from "../../Context/Auth"
@@ -72,7 +73,7 @@ function EcommerceLoginPage() {
         <div>
           <img
             className="mx-auto h-12 w-auto"
-            src="online-shop.png"  // Replace with your logo image path
+            src={Logo}  // Replace with your logo image path
             alt="E-commerce Logo"
           />
           <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">

@@ -4,14 +4,16 @@ import { Link,NavLink } from 'react-router-dom';
 import {useAuth} from "../../Context/Auth"
 import {toast } from "react-toastify"
 import 'react-toastify/dist/ReactToastify.css';
-import Logo from "../../assets/online-shopping.png"
+import Logo from "../../assets/shopping-bag.png"
 import Profile from "../../assets/profile.png"
 import SearchInput from '../Forms/SearchInput';
 import { useCart } from '../../Context/Cart';
 export default function Navbar() {
 
-const[cartItems,setCartItems]=useCart();
+
  const [auth,SetAuth]=useAuth();
+ const [cartItems, setCartItems] = useCart();
+ 
 
  //Dropdowns
   const [dropdowns, setDropdowns] = useState({
@@ -43,6 +45,9 @@ const handleLogout=()=>{
     user:null,
     token:''
   });
+  setCartItems([]);
+  localStorage.removeItem("cart");
+
   localStorage.removeItem("auth");
   toast.success("Logged Out Successfully");
 }
@@ -59,7 +64,7 @@ const handleLogout=()=>{
         
 
 <span className="self-center text-2xl  mr-4 font-semibold whitespace-nowrap text-white dark:text-white">
-  ShopSage
+PureCart
 </span>
          </Link>
             
@@ -120,7 +125,7 @@ const handleLogout=()=>{
               Logout
             </NavLink>
           </li>)}
-      <li>
+      {/* <li>
         <NavLink
           to="/category"
           activeClassName="text-indigo-500" // Apply active styling here
@@ -128,7 +133,7 @@ const handleLogout=()=>{
         >
           Category
         </NavLink>
-      </li>
+      </li> */}
       <li>
   <NavLink
     to="/cart"
@@ -265,6 +270,7 @@ const handleLogout=()=>{
               style={{ position: "absolute", right: "1rem", top: "3.5rem" }}
 
             >
+               {   auth?.user && 
               <div className="py-3 px-4">
                 <span className="block text-sm font-semibold text-gray-900 dark:text-white">
                   {auth?.user?.name}
@@ -273,10 +279,13 @@ const handleLogout=()=>{
                 {auth?.user?.name}
                 </span>
               </div>
+}
               <ul
                 className="py-1 font-light text-gray-500 dark:text-gray-400"
                 aria-labelledby="dropdown"
               >
+                    {   auth?.user && 
+
                  <li>
                   <Link
                     to="/Dashboard/user/profile"
@@ -285,6 +294,8 @@ const handleLogout=()=>{
                     My profile
                   </Link>
                 </li>
+  
+}
              {   auth?.user?.role ===1 &&
                 <li>
                   <Link
@@ -302,15 +313,7 @@ const handleLogout=()=>{
                 className="py-1 font-light text-gray-500 dark:text-gray-400"
                 aria-labelledby="dropdown"
               >
- <li>
-        <NavLink
-          to="/Budget"
-          activeClassName="text-indigo-500" // Apply active styling here
-          className="block py-2 px-4 text-sm hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
-        >
-          Budget
-        </NavLink>
-      </li>
+
 {!auth.user ? (   <>
         <li>
         <NavLink
@@ -329,7 +332,19 @@ const handleLogout=()=>{
             >
               Register
             </NavLink>
-          </li></>  ):( <li>
+          </li></>  ):(
+            
+            <>
+             <li>
+        <NavLink
+          to="/Budget"
+          activeClassName="text-indigo-500" // Apply active styling here
+          className="block py-2 px-4 text-sm hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
+        >
+          Budget
+        </NavLink>
+      </li>
+            <li>
             <NavLink
               to="/"
               activeClassName="text-indigo-500" // Apply active styling here
@@ -338,7 +353,7 @@ const handleLogout=()=>{
             >
                Sign out
             </NavLink>
-          </li>)} 
+          </li></>)} 
                
               </ul>
             </div>

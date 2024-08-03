@@ -1,8 +1,7 @@
 import stripe from 'stripe';
 
 
- console.log(process.env.STRIPE_API_SECRET)
-// Controller function for processing payments
+
 export const processPayment = async (req, res) => {
   console.log(req.body.amount);
     const myPayment = await stripeInstance.paymentIntents.create({

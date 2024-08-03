@@ -35,6 +35,7 @@ import UserMenu from './Components/Menu/UserMenu';
 import OrderDetailsPage from './Pages/Cart/OrderDetailsPage';
 import Budget from './Pages/Personalized/Budget';
 import ProductCategory from './Pages/Product/ProductCategory';
+import PrivateRoute from './Components/Routes/PrivateRoute';
 function App() {
 const[stripeapikey,setStripeapikey]=useState('');
 async function getStripeApiKey(){
@@ -62,13 +63,13 @@ useEffect(()=>{
    
     <Route path='/Test'element={<Test/>}/>
     <Route path='/Search'element={<SearchPage/>}/>
-    <Route path='/cart'element={<CartPage/>}/>
+    <Route path='/cart'element={<PrivateRoute> <CartPage/></PrivateRoute>}/>
     <Route path='/product/:slug'element={<Productdetails/>}/>
     <Route path="/order-success" element={<OrderSuccessPage/>} />
   <Route path='/edit-phone' element={<PhoneSignUp/>} />
     <Route path='/Grid'element={<ProductGrid/>}/>
     <Route path='/ProductGallery'element={<ProductGallery/>}/>
-    <Route path='/Budget'element={<Budget/>}/>
+    <Route path='/Budget'  element={<PrivateRoute><Budget/></PrivateRoute>}/>
     <Route path='/PaymentCheckout'element={<PaymentCheckout/>}/>
     <Route path='/'element={<Homepage/>}/>
     <Route path='/Signup'element={<Signup/>}/>
