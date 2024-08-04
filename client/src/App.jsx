@@ -37,15 +37,7 @@ import Budget from './Pages/Personalized/Budget';
 import ProductCategory from './Pages/Product/ProductCategory';
 import PrivateRoute from './Components/Routes/PrivateRoute';
 function App() {
-const[stripeapikey,setStripeapikey]=useState('');
-async function getStripeApiKey(){
-  const {data}=await axios.get(`${import.meta.env.VITE_API_URL}/api/v1/payment/stripeapikey`);
-  setStripeapikey(data.stripeapikey);
-}
 
-useEffect(()=>{
-  getStripeApiKey();
-},[])
   return (
     <div className='max-h-screen' >
       
