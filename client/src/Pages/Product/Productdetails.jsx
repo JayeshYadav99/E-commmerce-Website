@@ -45,7 +45,7 @@ const Productdetails = () => {
       console.log(data,auth?.budget);
 
       setCartItems((prevCartItems) => [...data.populatedCart.items]);
-      if (data.total > auth?.user?.budget) {
+      if (data.total > auth?.user?.budget || data.total > auth?.budget) {
         toast.error("You have exceeded your budget");
         return;
       }
