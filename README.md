@@ -67,4 +67,4 @@ Need assistance or have suggestions? We're here to help. Contact our support tea
 
 ---
 
-Thank you for choosing the Transparent Ecommerce Website for your grocery shopping needs. We're excited to be a part of your health and wellness journey, offering you the tools to shop smartly and live better.
+
