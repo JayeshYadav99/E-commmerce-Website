@@ -24,6 +24,37 @@ Watch our demo video to see PureCart in action:
   
 - **Global Search for Product and Category:** Find exactly what you need quickly with our global search feature, allowing you to search for products and categories across the entire platform with ease.
 
+  
+## Tech Stack
+
+
+  **Frontend:**
+- React
+- Tailwind CSS
+
+**Backend:**
+- Node.js
+- Express.js
+
+**Database:**
+- MongoDB
+
+**Payment Integration:**
+- Stripe
+
+**Deployment**
+- Render
+
+**Version Control:**
+- Git
+- GitHub
+
+**Others:**
+- Axios for API calls
+- JWT for Authentication
+- Context for State Management
+
+
 ### New and Upcoming Features
 
 
