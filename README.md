@@ -3,6 +3,12 @@
 
 Welcome to the PureCart, an innovative platform designed with your health and budget in mind. Our mission is to streamline your grocery shopping experience, making it effortless to purchase high-quality products that align with your wellness goals and financial plans. Dive into a world where convenience meets conscientious shopping.
 
+# Demo Video
+
+Watch our demo video to see PureCart in action:
+
+[![Watch the demo video](https://img.youtube.com/vi/YOUR_VIDEO_ID/maxresdefault.jpg)](https://github.com/user-attachments/assets/700dfc13-35f6-4b62-a164-000a2989a141)
+
 ## Features
 
 ### Basic Features
