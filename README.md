@@ -92,9 +92,7 @@ The Intelli-Grocery Refill feature is designed to take the guesswork out of groc
 
 To get started with the Transparent Ecommerce Website, simply sign up for an account on our platform. Navigate through our diverse product selections, utilize the robust search and filter tools, and start building your healthier, budget-friendly cart today.
 
-## Support
 
-Need assistance or have suggestions? We're here to help. Contact our support team for any inquiries or feedback. Your input is invaluable in making the Transparent Ecommerce Website the best it can be.
 
 ---
 
