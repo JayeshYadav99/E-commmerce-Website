@@ -32,6 +32,7 @@ router.get("/test", requireSignIn, isAdmin, testController);
 
 router.get("/user-auth", requireSignIn, (req, res) => {
   const { user } = req.body;
+  console.log(user);
   res.status(200).json({ status: "ok", user });
 });
 router.get("/admin-auth", requireSignIn, isAdmin, (req, res) => {

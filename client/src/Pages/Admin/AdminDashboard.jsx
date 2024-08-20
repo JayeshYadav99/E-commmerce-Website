@@ -33,16 +33,11 @@ const AdminDashboard = () => {
            <dt className="text-sm font-medium leading-6 text-gray-900">Email address</dt>
            <dd className="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">{auth?.user?.email}</dd>
          </div>
+      
          <div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
-           <dt className="text-sm font-medium leading-6 text-gray-900">Contact Details</dt>
-           <dd className="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">{auth?.user?.phone}</dd>
-         </div>
-         <div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
-           <dt className="text-sm font-medium leading-6 text-gray-900">About</dt>
+           <dt className="text-sm font-medium leading-6 text-gray-900">About Business</dt>
            <dd className="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">
-           we specialize in delivering premium soft drinks and delicious biscuits that bring joy to every moment. Our curated selection features both classic favorites and exciting new flavors, all crafted with the finest ingredients. Experience the perfect blend of taste and quality with every purchase from our online store.
-
-.
+           We Specialize In Delivering Premium Soft Drinks And Delicious Biscuits That Bring Joy To Every Moment. Our Curated Selection Features Both Classic Favorites And Exciting New Flavors, All Crafted With The Finest Ingredients. Experience The Perfect Blend Of Taste And Quality With Every Purchase From Our Online Store
            </dd>
          </div>
          <div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
