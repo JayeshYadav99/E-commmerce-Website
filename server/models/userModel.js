@@ -47,7 +47,7 @@ const userSchema = new mongoose.Schema(
     },
     SecurityAnswer: {
       type: String,
-      required: true,
+      // required: true,
     },
     cart: {
       type: mongoose.Schema.Types.ObjectId,
@@ -57,6 +57,8 @@ const userSchema = new mongoose.Schema(
       type: Number,
       default: 0,
     },
+    resetPasswordToken: String,
+		resetPasswordExpiresAt: Date,
   },
   { timestamps: true }
 );

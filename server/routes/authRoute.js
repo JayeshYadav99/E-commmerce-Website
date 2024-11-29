@@ -6,7 +6,9 @@ import {
   forgotpasswordController,
   editProfileController,
   updatePhoneController, 
-  UpdateBudgetController
+  UpdateBudgetController,
+  forgotPassword,
+  resetPassword
   // Add the new controller import
 } from "../controllers/authController.js";
 import { isAdmin, requireSignIn } from "../middlewares/authMiddleware.js";
@@ -22,6 +24,8 @@ router.post("/login", loginController);
 
 //Forgot PAssword ||post
 router.post("/forgotpassword", forgotpasswordController);
+router.post("/password", forgotPassword);
+router.post("/reset-password/:token", resetPassword);
 
 // Edit Profile || POST
 router.post("/editprofile", requireSignIn, editProfileController);

@@ -2,6 +2,14 @@ import userModel from "../models/userModel.js";
 import cartModel from "../models/cartModel.js";
 import { comparePassword, hashPassword } from "./../helpers/authHelper.js";
 import JWT from "jsonwebtoken";
+import crypto from "crypto";
+import bcryptjs from "bcryptjs";
+import {
+	sendPasswordResetEmail,
+	sendResetSuccessEmail,
+	sendVerificationEmail,
+	sendWelcomeEmail,
+} from "../mailtrap/emails.js";
 const createEmptyCartForUser = async (user) => {
   try {
     const newCart = await cartModel.create({ user: user._id, items: [] });
@@ -21,22 +29,40 @@ export const registerController = async (req, res) => {
     const { name, email, password, phoneno, Address ,SecurityAnswer} = req.body;
     //validations
     if (!name) {
-      return res.send({ error: "Name is Required" });
+      return res.status(404).send({
+        success: false,
+        message: "name is required",
+      });
     }
     if (!email) {
-      return res.send({ error: "Email is Required" });
+      return res.status(404).send({
+        success: false,
+        message: "name is required",
+      });
     }
     if (!password) {
-      return res.send({ error: "Password is Required" });
+      return res.status(404).send({
+        success: false,
+        message: "password is required",
+      });
     }
     if (!phoneno) {
-      return res.send({ error: "Phone no is Required" });
+      return res.status(404).send({
+        success: false,
+        message: "Phone Number is required",
+      });
     }
     if (!Address) {
-      return res.send({ error: "Address is Required" });
+      return res.status(404).send({
+        success: false,
+        message: "name is required",
+      });
     }
     if (!SecurityAnswer) {
-      return res.send({ error: "SecurityAnswer is Required" });
+      return res.status(404).send({
+        success: false,
+        message: "SecurityAnswer is required",
+      });
     }
     //check user
     const exisitingUser = await userModel.findOne({ email});
@@ -55,6 +81,7 @@ export const registerController = async (req, res) => {
       password: hashedPassword,
       SecurityAnswer
     });
+    await sendWelcomeEmail(user.email, user.name);
     await createEmptyCartForUser(user);
 
     res.status(201).send({
@@ -164,6 +191,66 @@ export const forgotpasswordController=async(req,res)=>{
   }
 
 }
+export const forgotPassword = async (req, res) => {
+	const { email } = req.body;
+  console.log(req.body);
+	try {
+		const user = await userModel.findOne({ email });
+
+		if (!user) {
+			return res.status(400).json({ success: false, message: "User not found" });
+		}
+
+		// Generate reset token
+		const resetToken = crypto.randomBytes(20).toString("hex");
+		const resetTokenExpiresAt = Date.now() + 1 * 60 * 60 * 1000; // 1 hour
+
+		user.resetPasswordToken = resetToken;
+		user.resetPasswordExpiresAt = resetTokenExpiresAt;
+console.log(user);
+		await user.save();
+
+		// send email
+		await sendPasswordResetEmail(user.email, `${process.env.CLIENT_URL}/reset-password/${resetToken}`);
+
+		res.status(200).json({ success: true, message: "Password reset link sent to your email" });
+	} catch (error) {
+		console.log("Error in forgotPassword ", error);
+		res.status(400).json({ success: false, message: error.message });
+	}
+};
+
+export const resetPassword = async (req, res) => {
+	try {
+		const { token } = req.params;
+		const { password } = req.body;
+
+		const user = await userModel.findOne({
+			resetPasswordToken: token,
+			resetPasswordExpiresAt: { $gt: Date.now() },
+		});
+
+		if (!user) {
+			return res.status(400).json({ success: false, message: "Invalid or expired reset token" });
+		}
+
+		// update password
+		const hashedPassword = await bcryptjs.hash(password, 10);
+
+		user.password = hashedPassword;
+		user.resetPasswordToken = undefined;
+		user.resetPasswordExpiresAt = undefined;
+		await user.save();
+
+		await sendResetSuccessEmail(user.email);
+
+		res.status(200).json({ success: true, message: "Password reset successful" });
+	} catch (error) {
+		console.log("Error in resetPassword ", error);
+		res.status(400).json({ success: false, message: error.message });
+	}
+};
+
 //test controller
 export const testController = (req, res) => {
   try {

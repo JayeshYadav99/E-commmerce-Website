@@ -36,6 +36,7 @@ import OrderDetailsPage from './Pages/Cart/OrderDetailsPage';
 import Budget from './Pages/Personalized/Budget';
 import ProductCategory from './Pages/Product/ProductCategory';
 import PrivateRoute from './Components/Routes/PrivateRoute';
+import ResetPasswordPage from './Pages/Auth/ResetPassword';
 function App() {
 
   return (
@@ -68,6 +69,7 @@ function App() {
     <Route path='/Login'element={<Login/>}/>
     <Route path='/Form'element={<CategoryForm/>}/>
     <Route path='/forgotpassword'element={<Forgotpassword/>}/>
+    <Route path="/reset-password/:token" element={<ResetPasswordPage />} />
     <Route path='/Dashboard' element={<PrivateRoutes/>}>
       <Route path="orderDetails/:orderId" element={<OrderDetailsPage/>} />
     <Route path="user" element={<UserMenu/>}>

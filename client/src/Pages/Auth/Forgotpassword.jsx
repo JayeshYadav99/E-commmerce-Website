@@ -1,162 +1,131 @@
-import React, { useState } from 'react';
-// import AuthContext from "../../Context/AuthProvider"
+import React, { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
-import { useNavigate} from "react-router-dom"
-import Layout from '../../Components/Layout/Layout';
 
-const Forgotpassword = () => {
-
-  const Navigate = useNavigate();
-
-  const [errMsg, setErrMsg] = useState('');
-  const [formData, setFormData] = useState({
-    email: '',
-    newpassword: '',
-    SecurityAnswer:''
-  });
-
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData({ ...formData, [name]: value });
-  };
-
+const ForgotPasswordPage = () => {
+  const navigate = useNavigate();
+  const [email, setEmail] = useState("");
+  const [isSubmitted, setIsSubmitted] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState("");
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    
+    setIsLoading(true);
+    setError("");
+
     try {
       const response = await axios.post(
-        `${import.meta.env.VITE_API_URL}/api/v1/auth/forgotpassword`,
-        {
-          ...formData
-        }
+        `${import.meta.env.VITE_API_URL}/api/v1/auth/password`,
+        { email }
       );
 
-      if (response) {
+      if (response.data) {
         console.log(response.data);
-        const { user, token } = response.data;
-        
-        Navigate('/login');
+        setIsSubmitted(true);
       }
-
-
-
-
     } catch (err) {
       console.log(err);
       if (!err?.response) {
-        setErrMsg('No Server Response');
+        setError("No Server Response");
       } else if (err.response?.status === 400) {
-        setErrMsg('Missing Username or Password');
-      } else if (err.response?.status === 401) {
-        setErrMsg('Unauthorized');
+        setError("Invalid Email");
       } else {
-        setErrMsg('Login Failed');
+        setError("Password Reset Failed");
       }
+    } finally {
+      setIsLoading(false);
     }
-    setFormData({
-      email: "",
-      password: "",
-    });
   };
+
   return (
-    <Layout title={"Forgot Password"}>      <div className="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
-    <div className="max-w-md w-full space-y-8">
-      <div>
-        <img
-          className="mx-auto h-12 w-auto"
-          src="./shopping-bag.png"  // Replace with your logo image path
-          alt="E-commerce Logo"
-        />
-        <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">
-      Reset your Password
-        </h2>
-      </div>
-      <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
-        <input type="hidden" name="remember" value="true" />
-        <div className="rounded-md shadow-sm -space-y-px">
-          <div>
-            <label htmlFor="email" className="sr-only">
-              Email address
-            </label>
-            <input
-              id="email"
-              name="email"
-              type="email"
-              autoComplete="email"
-              required
-              className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
-              placeholder="Email address"
-              value={formData.email}
-              onChange={handleChange}
-            />
-          </div>
-          <div>
-            <label htmlFor="password" className="sr-only">
-              Password
-            </label>
-            <input
-              id="newpassword"
-              name="newpassword"
-              type="newpassword"
-              autoComplete="current-password"
-              required
-              className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-b-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
-              placeholder="Enter New Password"
-              value={formData.newpassword}
-              onChange={handleChange}
-            />
-          </div>
-          <div>
-            <label htmlFor="password" className="sr-only">
-              Security Code
-            </label>
-            <input
-              id="SecurityAnswer"
-              name="SecurityAnswer"
-              type="SecurityAnswer"
-              autoComplete="current-password"
-              required
-              className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-b-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
-              placeholder="Enter Security Answer"
-              value={formData.SecurityAnswer}
-              onChange={handleChange}
-            />
-          </div>
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-100 to-indigo-200 py-12 px-4 sm:px-6 lg:px-8">
+      <div className="max-w-md w-full bg-white bg-opacity-50 backdrop-filter backdrop-blur-xl rounded-2xl shadow-xl overflow-hidden">
+        <div className="p-8">
+          <h2 className="text-4xl font-bold mb-8 text-center bg-gradient-to-r from-green-400 to-emerald-500 text-transparent bg-clip-text">
+            Forgot Password
+          </h2>
+
+          {!isSubmitted ? (
+            <form onSubmit={handleSubmit} className="space-y-6">
+              <p className="text-black mb-6 text-center">
+                Enter your email address and we'll send you a link to reset your password.
+              </p>
+              <div className="relative">
+                <svg
+                  className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-5 w-5"
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 20 20"
+                  fill="currentColor"
+                >
+                  <path d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z" />
+                  <path d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z" />
+                </svg>
+                <input
+                  type="email"
+                  placeholder="Email Address"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  required
+                  className="w-full py-3 px-10 bg-gray-700 text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
+                />
+              </div>
+              {error && <p className="text-red-500 text-sm mt-2">{error}</p>}
+              <button
+                className="w-full py-3 px-4 bg-gradient-to-r from-green-500 to-emerald-600 text-white font-bold rounded-lg shadow-lg hover:from-green-600 hover:to-emerald-700 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 focus:ring-offset-gray-900 transition duration-200"
+                type="submit"
+                disabled={isLoading}
+              >
+                {isLoading ? (
+                  <svg className="animate-spin h-5 w-5 mx-auto" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                    <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                    <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                  </svg>
+                ) : (
+                  "Send Reset Link"
+                )}
+              </button>
+            </form>
+          ) : (
+            <div className="text-center space-y-4">
+              <div className="w-16 h-16 bg-green-500 rounded-full flex items-center justify-center mx-auto">
+                <svg
+                  className="h-8 w-8 text-white"
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 20 20"
+                  fill="currentColor"
+                >
+                  <path d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z" />
+                  <path d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z" />
+                </svg>
+              </div>
+              <p className="text-gray-700">
+                If an account exists for {email}, you will receive a password reset link shortly.
+              </p>
+            </div>
+          )}
         </div>
 
-        <div className="flex items-center justify-between">
-          <div className="flex items-center">
-            <input
-              id="remember-me"
-              name="remember-me"
-              type="checkbox"
-              className="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded"
-            />
-            <label
-              htmlFor="remember-me"
-              className="ml-2 block text-sm text-gray-900"
-            >
-              Remember me
-            </label>
-          </div>
-
-
-        </div>
-
-        <div>
-          <button
-            type="submit"
-            className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+        <div className="px-8 py-4 bg-gray-900 bg-opacity-50 flex justify-center">
+          <Link
+            to="/login"
+            className="text-sm text-green-400 hover:underline flex items-center"
           >
-            Sign in
-          </button>
+            <svg
+              className="h-4 w-4 mr-2"
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 20 20"
+              fill="currentColor"
+            >
+              <path fillRule="evenodd" d="M9.707 16.707a1 1 0 01-1.414 0l-6-6a1 1 0 010-1.414l6-6a1 1 0 011.414 1.414L5.414 9H17a1 1 0 110 2H5.414l4.293 4.293a1 1 0 010 1.414z" clipRule="evenodd" />
+            </svg>
+            Back to Login
+          </Link>
         </div>
-      </form>
+      </div>
     </div>
-  </div> </Layout>
+  );
+};
 
-  )
-}
+export default ForgotPasswordPage;
 
-export default Forgotpassword
