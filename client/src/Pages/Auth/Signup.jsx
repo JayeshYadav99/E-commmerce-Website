@@ -2,10 +2,11 @@ import React, { useState } from 'react';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import { useNavigate } from 'react-router-dom';
+import ReCAPTCHA from "react-google-recaptcha";
+import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import Layout from '../../Components/Layout/Layout';
-import {toast } from "react-toastify"
-import { ToastContainer } from 'react-toastify';
+
 const validationSchema = Yup.object().shape({
   name: Yup.string().required('Name is required'),
   email: Yup.string().email('Invalid email address').required('Email is required'),
@@ -13,11 +14,14 @@ const validationSchema = Yup.object().shape({
   phoneno: Yup.string().matches(/^\d{10}$/, 'Invalid phone number').required('Phone number is required'),
   Address: Yup.string().required('Address is required'),
   SecurityAnswer: Yup.string().required('Security answer is required'),
+  captcha: Yup.string().required('Please complete the captcha'),
 });
 
 const SignUpForm = () => {
   const [isLoading, setIsLoading] = useState(false);
+  const [captchaValue, setCaptchaValue] = useState(null);
   const Navigate = useNavigate();
+
   const formik = useFormik({
     initialValues: {
       name: '',
@@ -26,32 +30,29 @@ const SignUpForm = () => {
       phoneno: '',
       Address: '',
       SecurityAnswer: '',
+      captcha: '',
     },
     validationSchema,
     onSubmit: async (values) => {
       setIsLoading(true);
       try {
-        // Replace this with your actual API call
+        // Include captcha value in the request
         const response = await fetch(`${import.meta.env.VITE_API_URL}/api/v1/auth/register`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(values),
+          body: JSON.stringify({ ...values, captcha: captchaValue }),
         });
         const data = await response.json();
-        console.log(data)
+        console.log(data);
         if (data.success) {
           toast.success('Registered Successfully');
-          // In a real app, you'd use React Router for navigation
           Navigate('/login');
         } else {
-         
           toast.error(`${data.message}`);
-          
-     
         }
       } catch (error) {
         console.error(error);
-       
+        toast.error('An error occurred during registration');
       } finally {
         setIsLoading(false);
       }
@@ -73,9 +74,14 @@ const SignUpForm = () => {
     ],
   ];
 
+  const handleCaptchaChange = (value) => {
+    setCaptchaValue(value);
+    formik.setFieldValue('captcha', value);
+  };
+
   return (
     <>
-    <ToastContainer/>
+      <ToastContainer />
       <div className="flex-grow flex items-center justify-center bg-gradient-to-br from-blue-100 to-indigo-200 px-4 sm:px-6 lg:px-8 py-12">
         <div className="max-w-2xl w-full space-y-8 bg-white p-10 rounded-2xl shadow-lg relative overflow-hidden">
           <div className="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-indigo-500 to-purple-500"></div>
@@ -119,10 +125,21 @@ const SignUpForm = () => {
                 ))}
               </div>
             ))}
+            <div className="flex justify-center">
+              <ReCAPTCHA
+                sitekey={import.meta.env.VITE_RECAPTCHA_SITE_KEY}
+                onChange={handleCaptchaChange}
+              />
+            </div>
+            {formik.touched.captcha && formik.errors.captcha && (
+              <p className="mt-2 text-sm text-red-600 text-center" id="captcha-error">
+                {formik.errors.captcha}
+              </p>
+            )}
             <div>
               <button
                 type="submit"
-                disabled={isLoading}
+                disabled={isLoading || !captchaValue}
                 className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 {isLoading ? (
@@ -136,7 +153,6 @@ const SignUpForm = () => {
             </div>
           </form>
           <div className="mt-6 border-t border-gray-200 pt-6">
-           
             <div className="mt-2 text-sm text-center">
               Already have an account?{' '}
               <a href="/login" className="font-medium text-indigo-600 hover:text-indigo-500">
@@ -146,9 +162,9 @@ const SignUpForm = () => {
           </div>
         </div>
       </div>
-      </>
-
+    </>
   );
 };
 
 export default SignUpForm;
+

@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
+import ReCAPTCHA from "react-google-recaptcha";
 
 const ForgotPasswordPage = () => {
   const navigate = useNavigate();
@@ -8,16 +9,21 @@ const ForgotPasswordPage = () => {
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
+  const [captchaValue, setCaptchaValue] = useState(null);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (!captchaValue) {
+      setError("Please complete the captcha");
+      return;
+    }
     setIsLoading(true);
     setError("");
 
     try {
       const response = await axios.post(
         `${import.meta.env.VITE_API_URL}/api/v1/auth/password`,
-        { email }
+        { email, captcha: captchaValue }
       );
 
       if (response.data) {
@@ -36,6 +42,10 @@ const ForgotPasswordPage = () => {
     } finally {
       setIsLoading(false);
     }
+  };
+
+  const handleCaptchaChange = (value) => {
+    setCaptchaValue(value);
   };
 
   return (
@@ -70,11 +80,17 @@ const ForgotPasswordPage = () => {
                   className="w-full py-3 px-10 bg-gray-700 text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
                 />
               </div>
+              <div className="flex justify-center">
+                <ReCAPTCHA
+                  sitekey={import.meta.env.VITE_RECAPTCHA_SITE_KEY}
+                  onChange={handleCaptchaChange}
+                />
+              </div>
               {error && <p className="text-red-500 text-sm mt-2">{error}</p>}
               <button
                 className="w-full py-3 px-4 bg-gradient-to-r from-green-500 to-emerald-600 text-white font-bold rounded-lg shadow-lg hover:from-green-600 hover:to-emerald-700 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 focus:ring-offset-gray-900 transition duration-200"
                 type="submit"
-                disabled={isLoading}
+                disabled={isLoading || !captchaValue}
               >
                 {isLoading ? (
                   <svg className="animate-spin h-5 w-5 mx-auto" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
